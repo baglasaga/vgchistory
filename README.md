@@ -23,3 +23,11 @@ This project is of interest to me because I have recently been getting into the 
 format of competitive Pokemon, and have not been able to find a match history tracking 
 tool that would usually exist for other competitive games. 
 
+## User Stories
+
+- As a user, I want to be able to add a match to a list of matches
+- As a user, I want to be able to view a list of my matches
+- As a user, I want to be able to see statistics on which Pokemon have
+the highest/lowest win-rates on/against my team
+- As a user, I want to be able to see statistics on how my in-game 
+rating has changed over time
