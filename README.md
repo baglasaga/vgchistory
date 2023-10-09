@@ -7,8 +7,7 @@
 This application will allow users to keep track of their competitive Pokemon matches,
 and provides information such as which games they've won or lost, which Pokemon were
 brought on each team, Pokemon usage rates, the user's overall win-rate and ranking, 
-their overall win-rate with or against individual Pokemon, and the win-rates of 
-individual Pokemon against each other. 
+and their overall win-rate with or against individual Pokemon.
 
 - **Who will use it?**
 
@@ -27,7 +26,8 @@ tool that would usually exist for other competitive games.
 
 - As a user, I want to be able to add a match to a list of matches
 - As a user, I want to be able to view a list of my matches
+- As a user, I want to be able to see statistics on my overall match 
+win-rate
 - As a user, I want to be able to see statistics on which Pokemon have
 the highest/lowest win-rates on/against my team
-- As a user, I want to be able to see statistics on how my in-game 
-rating has changed over time
+- As a user, I want to be able to see my current in-game rating
