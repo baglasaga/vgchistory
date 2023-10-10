@@ -1,9 +1,6 @@
 package ui;
 
-import model.Match;
-import model.MatchHistory;
-import model.TeamSelector;
-import model.Pokemon;
+import model.*;
 
 import java.util.List;
 import java.util.Scanner;
@@ -11,13 +8,14 @@ import java.util.Scanner;
 public class MatchHistoryViewer {
     private static final int MAX_POKEMON_PER_TEAM = 4;
     private MatchHistory mh;
+    private PokemonFinder pf;
     private Scanner input;
 
     public MatchHistoryViewer() {
         runMatchHistory();
     }
 
-    public void runMatchHistory() {
+    private void runMatchHistory() {
         boolean running = true;
         String command = null;
 
@@ -36,12 +34,13 @@ public class MatchHistoryViewer {
         System.out.println("\nClosing...");
     }
 
-    public void start() {
+    private void start() {
         mh = new MatchHistory();
+        pf = new PokemonFinder();
         input = new Scanner(System.in);
     }
 
-    public void displayMenu() {
+    private void displayMenu() {
         System.out.println("\nSelect an option:");
         System.out.println("\na -> add a match");
         System.out.println("\nv -> view match history");
@@ -50,7 +49,7 @@ public class MatchHistoryViewer {
         System.out.println("\nq -> quit");
     }
 
-    public void processCommand(String command) {
+    private void processCommand(String command) {
         if (command.equals("a")) {
             addMatch();
         } else if (command.equals("v")) {
@@ -64,7 +63,7 @@ public class MatchHistoryViewer {
         }
     }
 
-    public void addMatch() {
+    private void addMatch() {
         Match match = new Match();
 
         processWinStatus(match);
@@ -82,7 +81,7 @@ public class MatchHistoryViewer {
 
     }
 
-    public void processWinStatus(Match match) {
+    private void processWinStatus(Match match) {
         System.out.println("Did you win (enter w) or lose (enter l)?\n");
         boolean choosing = true;
         while (choosing) {
@@ -100,7 +99,7 @@ public class MatchHistoryViewer {
         }
     }
 
-    public void addTeam(Match match, TeamSelector team) {
+    private void addTeam(Match match, TeamSelector team) {
         String prompt;
         if (team == TeamSelector.USER) {
             prompt = "Add a Pokemon on your team (case sensitive):\n";
@@ -114,7 +113,7 @@ public class MatchHistoryViewer {
         }
     }
 
-    public void displayMatches() {
+    private void displayMatches() {
         String winLoss;
         String eloPrefix;
         System.out.println("Elo: " + mh.getElo());
@@ -140,7 +139,7 @@ public class MatchHistoryViewer {
         }
     }
 
-    public void pokemonStatsOptions() {
+    private void pokemonStatsOptions() {
         String command;
         boolean choosing = true;
         System.out.println("\nSelect an option:");
@@ -168,13 +167,12 @@ public class MatchHistoryViewer {
         chooseNumberPokemon(team);
     }
 
-    public void chooseNumberPokemon(TeamSelector team) {
-        String command;
+    private void chooseNumberPokemon(TeamSelector team) {
         boolean choosing = true;
+        String command;
         int num = 0;
         while (choosing) {
-            command = input.next();
-            command = command.toLowerCase();
+            command = input.next().toLowerCase();
             if (command.equals("a")) {
                 num = mh.getPokemonList().size();
                 choosing = false;
@@ -182,19 +180,19 @@ public class MatchHistoryViewer {
                 System.out.println("Enter custom amount:");
                 int picked = input.nextInt();
                 if (picked <= mh.getPokemonList().size()) {
-                    num = input.nextInt();
+                    num = picked;
                     choosing = false;
                 } else {
-                    System.out.println("Too big of a number!");
+                    System.out.println("Too big of a number! Choose an option again.");
                 }
             } else {
-                System.out.println("Invalid choice!");
+                System.out.println("Invalid choice! Choose an option again.");
             }
         }
         chooseHighestOrLowest(team, num);
     }
 
-    public void chooseHighestOrLowest(TeamSelector team, int num) {
+    private void chooseHighestOrLowest(TeamSelector team, int num) {
         String command;
         boolean choosing = true;
         System.out.println("\nWould you like to sort by the highest or lowest win-rates?");
@@ -215,13 +213,13 @@ public class MatchHistoryViewer {
         }
     }
 
-    public void displayPokemonList(List<Pokemon> list) {
+    private void displayPokemonList(List<Pokemon> list) {
         for (Pokemon p : list) {
             displayPokemon(p);
         }
     }
 
-    public void displayPokemon(Pokemon p) {
+    private void displayPokemon(Pokemon p) {
         System.out.println("\n[" + p.getName() + "]");
         System.out.println("\n Win-rate with: " + p.getAlliedWinRate());
         System.out.println("\n Win-rate against: " + p.getEnemyWinRate());
@@ -238,8 +236,8 @@ public class MatchHistoryViewer {
             System.out.println("Search for Pokemon name: ");
             input.nextLine();
             String command = input.nextLine();
-            if (mh.canFindName(command)) {
-                displayPokemon(mh.findPokemon(command));
+            if (pf.canFindName(command, mh.getPokemonList())) {
+                displayPokemon(pf.findPokemon(command, mh.getPokemonList()));
             } else {
                 System.out.println("Can't find Pokemon named " + command + "!");
             }

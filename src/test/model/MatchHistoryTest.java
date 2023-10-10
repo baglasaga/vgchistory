@@ -302,6 +302,12 @@ public class MatchHistoryTest {
     }
 
     @Test
+    public void testCantFindPokemon() {
+        // this test goes against the REQUIRES clause of this method, but is here for coverage
+        assertNull(mh.findPokemon("Pikachu"));
+    }
+
+    @Test
     public void testUpdateWinRateNoWins() {
         m1.setLoss();
         mh.addMatch(m1);

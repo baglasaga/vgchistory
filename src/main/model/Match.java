@@ -57,7 +57,7 @@ public class Match {
         this.eloChange = elo;
     }
 
-    // EFFECTS: returns the names of every Pokemon on given team
+    // EFFECTS: returns list of the names of every Pokemon on given team
     public List<String> getTeamNames(TeamSelector team) {
         List<Pokemon> t;
         List<String> result = new ArrayList<>();
@@ -73,31 +73,13 @@ public class Match {
     }
 
 
-    // EFFECTS: returns true if Pokemon of given name exists in this match on either team
-    private boolean findNameOnEitherTeam(String name) {
-        List<Pokemon> bothTeams = new ArrayList<>();
-        bothTeams.addAll(this.myTeam);
-        bothTeams.addAll(this.enemyTeam);
-        for (Pokemon p : bothTeams) {
-            if (p.getName().equals(name)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     // REQUIRES: Pokemon of given name must exist in either team (findNameOnEitherTeam(name) must return true)
     // EFFECTS: searches both teams in this and returns Pokemon of given name
-    private Pokemon findPokemonOnEitherTeam(String name) {
+    private Pokemon findPokemonOnEitherTeam(String name, PokemonFinder pf) {
         List<Pokemon> bothTeams = new ArrayList<>();
         bothTeams.addAll(this.myTeam);
         bothTeams.addAll(this.enemyTeam);
-        for (Pokemon p : bothTeams) {
-            if (p.getName().equals(name)) {
-                return p;
-            }
-        }
-        return null;
+        return pf.findPokemon(name, bothTeams);
     }
 
     // REQUIRES: this.win !== null (setWin() or setLoss() must be called first), Pokemon of given name is not already
@@ -107,10 +89,11 @@ public class Match {
     //          adds that Pokemon to the given team in the match. otherwise, creates new Pokemon with given name
     //          and adds to the given team in the match
     public void addPokemonByName(String name, TeamSelector team, MatchHistory mh) {
-        if (mh.canFindName(name)) {
-            addPokemon(mh.findPokemon(name), team);
-        } else if (findNameOnEitherTeam(name)) {
-            addPokemon(findPokemonOnEitherTeam(name), team);
+        PokemonFinder pf = new PokemonFinder();
+        if (pf.canFindName(name, mh.getPokemonList())) {
+            addPokemon(pf.findPokemon(name, mh.getPokemonList()), team);
+        } else if (findPokemonOnEitherTeam(name, pf) != null) {
+            addPokemon(findPokemonOnEitherTeam(name, pf), team);
         } else {
             addPokemon(new Pokemon(name), team);
         }
