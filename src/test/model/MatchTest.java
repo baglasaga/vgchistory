@@ -3,12 +3,15 @@ package model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MatchTest {
 
     // TODO: add tests where you add unique pokemon to each team?
 
+    private MatchHistory mh;
     private Match m1;
     private Match m2;
     private Pokemon p1;
@@ -16,6 +19,8 @@ public class MatchTest {
 
     @BeforeEach
     public void setup() {
+        mh = new MatchHistory();
+
         m1 = new Match();
         m2 = new Match();
 
@@ -40,6 +45,64 @@ public class MatchTest {
 
         assertTrue(m1.getWinStatus());
         assertFalse(m2.getWinStatus());
+    }
+
+    @Test
+    public void testGetTeamNames() {
+        m1.setWin();
+
+        m1.addPokemon(p1, TeamSelector.USER);
+        m1.addPokemon(p2, TeamSelector.USER);
+
+        m1.addPokemon(p1, TeamSelector.OPPONENT);
+        m1.addPokemon(p2, TeamSelector.OPPONENT);
+
+        List<String> userTeamNames = m1.getTeamNames(TeamSelector.USER);
+        List<String> opponentTeamNames = m1.getTeamNames(TeamSelector.OPPONENT);
+
+        assertEquals(2, userTeamNames.size());
+        assertEquals(2, opponentTeamNames.size());
+
+        assertTrue(userTeamNames.contains(p1.getName()));
+        assertTrue(userTeamNames.contains(p2.getName()));
+
+        assertTrue(opponentTeamNames.contains(p1.getName()));
+        assertTrue(opponentTeamNames.contains(p2.getName()));
+    }
+
+    @Test
+    public void testAddPokemonByNameNewPokemon() {
+        m1.setWin();
+        m1.addPokemonByName("Chi-Yu", TeamSelector.USER, mh);
+        assertEquals(1, m1.getMyTeam().size());
+        assertEquals("Chi-Yu", m1.getMyTeam().get(0).getName());
+    }
+
+    @Test
+    public void testAddPokemonByNameAlreadyExistsInMatchHistory() {
+        mh.addUniquePokemon(p1);
+        mh.addUniquePokemon(p2);
+
+        m1.setWin();
+        m1.addPokemonByName("Flutter Mane", TeamSelector.USER, mh);
+        assertEquals(1, m1.getMyTeam().size());
+        assertTrue(m1.getMyTeam().contains(p1));
+
+        m1.addPokemonByName("Iron Hands", TeamSelector.OPPONENT, mh);
+        assertEquals(1, m1.getEnemyTeam().size());
+        assertTrue(m1.getEnemyTeam().contains(p2));
+    }
+
+    @Test
+    public void testAddPokemonByNameAlreadyExistsInMatch() {
+        m1.setWin();
+        m1.addPokemonByName("Chi-Yu", TeamSelector.USER, mh);
+        assertEquals(1, m1.getMyTeam().size());
+        assertEquals("Chi-Yu", m1.getMyTeam().get(0).getName());
+
+        m1.addPokemonByName("Chi-Yu", TeamSelector.OPPONENT, mh);
+        assertEquals(1, m1.getEnemyTeam().size());
+        assertEquals(m1.getMyTeam().get(0), m1.getEnemyTeam().get(0));
     }
 
     @Test

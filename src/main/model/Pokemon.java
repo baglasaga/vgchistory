@@ -77,13 +77,14 @@ public class Pokemon {
     }
 
     // MODIFIES: this
-    // EFFECTS: adds match to given team's matches
+    // EFFECTS: adds match to given team's matches, and updates the win-rate of this on given team
     public void addMatch(Match match, TeamSelector team) {
         if (team == TeamSelector.USER) {
             this.alliedMatches.add(match);
         } else {
             this.enemyMatches.add(match);
         }
+        updateWinRate(team);
     }
 
     // REQUIRES: list of matches for given team must not be empty

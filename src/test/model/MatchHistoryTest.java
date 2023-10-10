@@ -289,6 +289,19 @@ public class MatchHistoryTest {
     }
 
     @Test
+    public void testCanFindName() {
+        mh.addUniquePokemon(p1);
+        assertTrue(mh.canFindName("Ogerpon-Hearthflame"));
+        assertFalse(mh.canFindName("Salamence"));
+    }
+
+    @Test
+    public void testFindPokemon() {
+        mh.addUniquePokemon(p1);
+        assertEquals(p1, mh.findPokemon("Ogerpon-Hearthflame"));
+    }
+
+    @Test
     public void testUpdateWinRateNoWins() {
         m1.setLoss();
         mh.addMatch(m1);

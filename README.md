@@ -31,3 +31,5 @@ win-rate
 - As a user, I want to be able to see statistics on which Pokemon have
 the highest/lowest win-rates on/against my team
 - As a user, I want to be able to see my current in-game rating
+- As a user, I want to be able to search for a Pokemon in my match history
+to find its statistics

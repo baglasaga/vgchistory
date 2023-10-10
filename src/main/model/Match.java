@@ -57,8 +57,67 @@ public class Match {
         this.eloChange = elo;
     }
 
-    // REQUIRES: this.win !== null (setWin() or setLoss() must be called first), p is not already on given team
+    // EFFECTS: returns the names of every Pokemon on given team
+    public List<String> getTeamNames(TeamSelector team) {
+        List<Pokemon> t;
+        List<String> result = new ArrayList<>();
+        if (team == TeamSelector.USER) {
+            t = this.getMyTeam();
+        } else {
+            t = this.getEnemyTeam();
+        }
+        for (Pokemon p : t) {
+            result.add(p.getName());
+        }
+        return result;
+    }
+
+
+    // EFFECTS: returns true if Pokemon of given name exists in this match on either team
+    private boolean findNameOnEitherTeam(String name) {
+        List<Pokemon> bothTeams = new ArrayList<>();
+        bothTeams.addAll(this.myTeam);
+        bothTeams.addAll(this.enemyTeam);
+        for (Pokemon p : bothTeams) {
+            if (p.getName().equals(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // REQUIRES: Pokemon of given name must exist in either team (findNameOnEitherTeam(name) must return true)
+    // EFFECTS: searches both teams in this and returns Pokemon of given name
+    private Pokemon findPokemonOnEitherTeam(String name) {
+        List<Pokemon> bothTeams = new ArrayList<>();
+        bothTeams.addAll(this.myTeam);
+        bothTeams.addAll(this.enemyTeam);
+        for (Pokemon p : bothTeams) {
+            if (p.getName().equals(name)) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    // REQUIRES: this.win !== null (setWin() or setLoss() must be called first), Pokemon of given name is not already
+    //           on given team
     // MODIFIES: this
+    // EFFECTS: if Pokemon of given name is in mh.getPokemonList() or already in this match,
+    //          adds that Pokemon to the given team in the match. otherwise, creates new Pokemon with given name
+    //          and adds to the given team in the match
+    public void addPokemonByName(String name, TeamSelector team, MatchHistory mh) {
+        if (mh.canFindName(name)) {
+            addPokemon(mh.findPokemon(name), team);
+        } else if (findNameOnEitherTeam(name)) {
+            addPokemon(findPokemonOnEitherTeam(name), team);
+        } else {
+            addPokemon(new Pokemon(name), team);
+        }
+    }
+
+    // REQUIRES: this.win !== null (setWin() or setLoss() must be called first), p is not already on given team
+    // MODIFIES: this, p
     // EFFECTS: adds p to given team, and adds this to p's matches on that team, adding a win for p on that team if the
     // match is won
     public void addPokemon(Pokemon p, TeamSelector team) {
@@ -69,9 +128,9 @@ public class Match {
             this.enemyTeam.add(p);
         }
 
-        p.addMatch(this, team);
         if (this.win) {
             p.addWin(team);
         }
+        p.addMatch(this, team);
     }
 }
