@@ -9,8 +9,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class MatchTest {
 
-    // TODO: add tests where you add unique pokemon to each team?
-
     private MatchHistory mh;
     private Match m1;
     private Match m2;
@@ -30,12 +28,10 @@ public class MatchTest {
 
     @Test
     public void testConstructor() {
-        //assertEquals(0, m1.getId());
         assertTrue(m1.getId() > 0);
         assertTrue(m1.getMyTeam().isEmpty());
         assertTrue(m1.getEnemyTeam().isEmpty());
 
-       // assertEquals(1, m2.getId());
     }
 
     @Test
