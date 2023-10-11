@@ -90,7 +90,7 @@ public class Pokemon {
     // REQUIRES: list of matches for given team must not be empty
     // MODIFIES: this
     // EFFECTS: updates percentage of matches in given team's matches that are won
-    public void updateWinRate(TeamSelector team) {
+    private void updateWinRate(TeamSelector team) {
         int wins;
         List<Match> matches;
         if (team == TeamSelector.USER) {

@@ -9,20 +9,22 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class MatchTest {
 
-    // TODO: add tests where you add unique pokemon to each team?
-
     private MatchHistory mh;
+    private PokemonFinder pf;
     private Match m1;
     private Match m2;
+    private Match m3;
     private Pokemon p1;
     private Pokemon p2;
 
     @BeforeEach
     public void setup() {
         mh = new MatchHistory();
+        pf = new PokemonFinder();
 
         m1 = new Match();
         m2 = new Match();
+        m3 = new Match();
 
         p1 = new Pokemon("Flutter Mane");
         p2 = new Pokemon("Iron Hands");
@@ -30,12 +32,12 @@ public class MatchTest {
 
     @Test
     public void testConstructor() {
-        //assertEquals(0, m1.getId());
+
         assertTrue(m1.getId() > 0);
         assertTrue(m1.getMyTeam().isEmpty());
         assertTrue(m1.getEnemyTeam().isEmpty());
 
-       // assertEquals(1, m2.getId());
+
     }
 
     @Test
@@ -51,11 +53,11 @@ public class MatchTest {
     public void testGetTeamNames() {
         m1.setWin();
 
-        m1.addPokemon(p1, TeamSelector.USER);
-        m1.addPokemon(p2, TeamSelector.USER);
+        m1.addPokemonByName(p1.getName(), TeamSelector.USER, mh);
+        m1.addPokemonByName(p2.getName(), TeamSelector.USER, mh);
 
-        m1.addPokemon(p1, TeamSelector.OPPONENT);
-        m1.addPokemon(p2, TeamSelector.OPPONENT);
+        m1.addPokemonByName(p1.getName(), TeamSelector.OPPONENT, mh);
+        m1.addPokemonByName(p2.getName(), TeamSelector.OPPONENT, mh);
 
         List<String> userTeamNames = m1.getTeamNames(TeamSelector.USER);
         List<String> opponentTeamNames = m1.getTeamNames(TeamSelector.OPPONENT);
@@ -80,17 +82,17 @@ public class MatchTest {
 
     @Test
     public void testAddPokemonByNameAlreadyExistsInMatchHistory() {
-        mh.addUniquePokemon(p1);
-        mh.addUniquePokemon(p2);
+        addUniquePokemon(p1, mh);
+        addUniquePokemon(p2, mh);
 
         m1.setWin();
         m1.addPokemonByName("Flutter Mane", TeamSelector.USER, mh);
         assertEquals(1, m1.getMyTeam().size());
-        assertTrue(m1.getMyTeam().contains(p1));
+        assertTrue(m1.getMyTeam().contains(pf.findPokemon(p1.getName(), mh.getPokemonList())));
 
         m1.addPokemonByName("Iron Hands", TeamSelector.OPPONENT, mh);
         assertEquals(1, m1.getEnemyTeam().size());
-        assertTrue(m1.getEnemyTeam().contains(p2));
+        assertTrue(m1.getEnemyTeam().contains(pf.findPokemon(p2.getName(), mh.getPokemonList())));
     }
 
     @Test
@@ -109,16 +111,17 @@ public class MatchTest {
     public void testAddOneAllyPokemonToLostMatch() {
         m1.setLoss();
 
-        m1.addPokemon(p1, TeamSelector.USER);
+        m1.addPokemonByName(p1.getName(), TeamSelector.USER, mh);
+        Pokemon firstPokemon = m1.getMyTeam().get(0);
         assertEquals(1, m1.getMyTeam().size());
-        assertTrue(m1.getMyTeam().contains(p1));
+        assertEquals(p1.getName(), firstPokemon.getName());
 
-        assertEquals(1, p1.getAlliedMatches().size());
-        assertTrue(p1.getAlliedMatches().contains(m1));
-        assertEquals(0, p1.getAlliedWins());
+        assertEquals(1, firstPokemon.getAlliedMatches().size());
+        assertTrue(firstPokemon.getAlliedMatches().contains(m1));
+        assertEquals(0, firstPokemon.getAlliedWins());
 
-        assertEquals(0, p1.getEnemyMatches().size());
-        assertEquals(0, p1.getEnemyWins());
+        assertEquals(0, firstPokemon.getEnemyMatches().size());
+        assertEquals(0, firstPokemon.getEnemyWins());
 
     }
 
@@ -126,95 +129,107 @@ public class MatchTest {
     public void testAddOnePokemonEachTeamToLostMatch() {
         m1.setLoss();
 
-        m1.addPokemon(p1, TeamSelector.USER);
-        m1.addPokemon(p2, TeamSelector.OPPONENT);
+        m1.addPokemonByName(p1.getName(), TeamSelector.USER, mh);
+        Pokemon firstPokemon = m1.getMyTeam().get(0);
+        m1.addPokemonByName(p2.getName(), TeamSelector.OPPONENT, mh);
+        Pokemon secondPokemon = m1.getEnemyTeam().get(0);
 
         assertEquals(1, m1.getMyTeam().size());
-        assertTrue(m1.getMyTeam().contains(p1));
+        assertEquals(p1.getName(), firstPokemon.getName());
 
         assertEquals(1, m1.getEnemyTeam().size());
-        assertTrue(m1.getEnemyTeam().contains(p2));
+        assertEquals(p2.getName(), secondPokemon.getName());
 
-        assertEquals(1, p1.getAlliedMatches().size());
-        assertTrue(p1.getAlliedMatches().contains(m1));
-        assertEquals(0, p1.getAlliedWins());
+        assertEquals(1, firstPokemon.getAlliedMatches().size());
+        assertTrue(firstPokemon.getAlliedMatches().contains(m1));
+        assertEquals(0, firstPokemon.getAlliedWins());
 
-        assertEquals(1, p2.getEnemyMatches().size());
-        assertTrue(p2.getEnemyMatches().contains(m1));
-        assertEquals(0, p2.getEnemyWins());
+        assertEquals(1, secondPokemon.getEnemyMatches().size());
+        assertTrue(secondPokemon.getEnemyMatches().contains(m1));
+        assertEquals(0, secondPokemon.getEnemyWins());
     }
 
     @Test
     public void testAddOneAllyPokemonToWonMatch() {
         m1.setWin();
 
-        m1.addPokemon(p1, TeamSelector.USER);
+        m1.addPokemonByName(p1.getName(), TeamSelector.USER, mh);
+        Pokemon firstPokemon = m1.getMyTeam().get(0);
         assertEquals(1, m1.getMyTeam().size());
-        assertTrue(m1.getMyTeam().contains(p1));
+        assertEquals(p1.getName(), firstPokemon.getName());
 
-        assertEquals(1, p1.getAlliedMatches().size());
-        assertTrue(p1.getAlliedMatches().contains(m1));
-        assertEquals(1, p1.getAlliedWins());
+        assertEquals(1, firstPokemon.getAlliedMatches().size());
+        assertTrue(firstPokemon.getAlliedMatches().contains(m1));
+        assertEquals(1, firstPokemon.getAlliedWins());
 
-        assertEquals(0, p1.getEnemyMatches().size());
-        assertEquals(0, p1.getEnemyWins());
+        assertEquals(0, firstPokemon.getEnemyMatches().size());
+        assertEquals(0, firstPokemon.getEnemyWins());
     }
 
     @Test
     public void testAddOnePokemonEachTeamToWonMatch() {
         m1.setWin();
 
-        m1.addPokemon(p1, TeamSelector.USER);
-        m1.addPokemon(p2, TeamSelector.OPPONENT);
+        m1.addPokemonByName(p1.getName(), TeamSelector.USER, mh);
+        Pokemon firstPokemon = m1.getMyTeam().get(0);
+        m1.addPokemonByName(p2.getName(), TeamSelector.OPPONENT, mh);
+        Pokemon secondPokemon = m1.getEnemyTeam().get(0);
 
         assertEquals(1, m1.getMyTeam().size());
-        assertTrue(m1.getMyTeam().contains(p1));
+        assertEquals(p1.getName(), firstPokemon.getName());
 
         assertEquals(1, m1.getEnemyTeam().size());
-        assertTrue(m1.getEnemyTeam().contains(p2));
+        assertEquals(p2.getName(), secondPokemon.getName());
 
-        assertEquals(1, p1.getAlliedMatches().size());
-        assertTrue(p1.getAlliedMatches().contains(m1));
-        assertEquals(1, p1.getAlliedWins());
+        assertEquals(1, firstPokemon.getAlliedMatches().size());
+        assertTrue(firstPokemon.getAlliedMatches().contains(m1));
+        assertEquals(1, firstPokemon.getAlliedWins());
 
-        assertEquals(1, p2.getEnemyMatches().size());
-        assertTrue(p2.getEnemyMatches().contains(m1));
-        assertEquals(1, p2.getEnemyWins());
+        assertEquals(1, secondPokemon.getEnemyMatches().size());
+        assertTrue(secondPokemon.getEnemyMatches().contains(m1));
+        assertEquals(1, secondPokemon.getEnemyWins());
     }
 
     @Test
     public void testAddMultiplePokemonEachTeamToLostMatch() {
         m1.setLoss();
 
-        m1.addPokemon(p1, TeamSelector.USER);
-        m1.addPokemon(p2, TeamSelector.USER);
+        m1.addPokemonByName(p1.getName(), TeamSelector.USER, mh);
+        Pokemon firstAlly = m1.getMyTeam().get(0);
+        m1.addPokemonByName(p2.getName(), TeamSelector.USER, mh);
+        Pokemon secondAlly = m1.getMyTeam().get(1);
 
         assertEquals(2, m1.getMyTeam().size());
-        assertTrue(m1.getMyTeam().contains(p1));
-        assertTrue(m1.getMyTeam().contains(p2));
+        assertEquals(p1.getName(), firstAlly.getName());
+        assertEquals(p2.getName(), secondAlly.getName());
 
-        m1.addPokemon(p1, TeamSelector.OPPONENT);
-        m1.addPokemon(p2, TeamSelector.OPPONENT);
+        m1.addPokemonByName(p1.getName(), TeamSelector.OPPONENT, mh);
+        Pokemon firstEnemy = m1.getEnemyTeam().get(0);
+        m1.addPokemonByName(p2.getName(), TeamSelector.OPPONENT, mh);
+        Pokemon secondEnemy = m1.getEnemyTeam().get(1);
 
         assertEquals(2, m1.getMyTeam().size());
-        assertTrue(m1.getEnemyTeam().contains(p1));
-        assertTrue(m1.getEnemyTeam().contains(p2));
+        assertEquals(p1.getName(), firstEnemy.getName());
+        assertEquals(p2.getName(), secondEnemy.getName());
 
-        assertEquals(1, p1.getAlliedMatches().size());
-        assertTrue(p1.getAlliedMatches().contains(m1));
-        assertEquals(0, p1.getAlliedWins());
+        assertEquals(1, firstAlly.getAlliedMatches().size());
+        assertTrue(firstAlly.getAlliedMatches().contains(m1));
+        assertEquals(0, firstAlly.getAlliedWins());
 
-        assertEquals(1, p2.getAlliedMatches().size());
-        assertTrue(p2.getAlliedMatches().contains(m1));
-        assertEquals(0, p2.getAlliedWins());
+        assertEquals(1, secondAlly.getAlliedMatches().size());
+        assertTrue(secondAlly.getAlliedMatches().contains(m1));
+        assertEquals(0, secondAlly.getAlliedWins());
 
-        assertEquals(1, p1.getEnemyMatches().size());
-        assertTrue(p1.getEnemyMatches().contains(m1));
-        assertEquals(0, p1.getEnemyWins());
+        assertEquals(1, firstEnemy.getEnemyMatches().size());
+        assertTrue(firstEnemy.getEnemyMatches().contains(m1));
+        assertEquals(0, firstEnemy.getEnemyWins());
 
-        assertEquals(1, p2.getEnemyMatches().size());
-        assertTrue(p2.getEnemyMatches().contains(m1));
-        assertEquals(0, p2.getEnemyWins());
+        assertEquals(1, secondEnemy.getEnemyMatches().size());
+        assertTrue(secondEnemy.getEnemyMatches().contains(m1));
+        assertEquals(0, secondEnemy.getEnemyWins());
+
+        assertEquals(firstAlly, firstEnemy);
+        assertEquals(secondAlly, secondEnemy);
 
     }
 
@@ -222,36 +237,50 @@ public class MatchTest {
     public void testAddMultiplePokemonEachTeamToWonMatch() {
         m1.setWin();
 
-        m1.addPokemon(p1, TeamSelector.USER);
-        m1.addPokemon(p2, TeamSelector.USER);
+        m1.addPokemonByName(p1.getName(), TeamSelector.USER, mh);
+        Pokemon firstAlly = m1.getMyTeam().get(0);
+        m1.addPokemonByName(p2.getName(), TeamSelector.USER, mh);
+        Pokemon secondAlly = m1.getMyTeam().get(1);
 
         assertEquals(2, m1.getMyTeam().size());
-        assertTrue(m1.getMyTeam().contains(p1));
-        assertTrue(m1.getMyTeam().contains(p2));
+        assertEquals(p1.getName(), firstAlly.getName());
+        assertEquals(p2.getName(), secondAlly.getName());
 
-        m1.addPokemon(p1, TeamSelector.OPPONENT);
-        m1.addPokemon(p2, TeamSelector.OPPONENT);
+        m1.addPokemonByName(p1.getName(), TeamSelector.OPPONENT, mh);
+        Pokemon firstEnemy = m1.getEnemyTeam().get(0);
+        m1.addPokemonByName(p2.getName(), TeamSelector.OPPONENT, mh);
+        Pokemon secondEnemy = m1.getEnemyTeam().get(1);
 
         assertEquals(2, m1.getMyTeam().size());
-        assertTrue(m1.getEnemyTeam().contains(p1));
-        assertTrue(m1.getEnemyTeam().contains(p2));
+        assertEquals(p1.getName(), firstEnemy.getName());
+        assertEquals(p2.getName(), secondEnemy.getName());
 
-        assertEquals(1, p1.getAlliedMatches().size());
-        assertTrue(p1.getAlliedMatches().contains(m1));
-        assertEquals(1, p1.getAlliedWins());
+        assertEquals(1, firstAlly.getAlliedMatches().size());
+        assertTrue(firstAlly.getAlliedMatches().contains(m1));
+        assertEquals(1, firstAlly.getAlliedWins());
 
-        assertEquals(1, p2.getAlliedMatches().size());
-        assertTrue(p2.getAlliedMatches().contains(m1));
-        assertEquals(1, p2.getAlliedWins());
+        assertEquals(1, secondAlly.getAlliedMatches().size());
+        assertTrue(secondAlly.getAlliedMatches().contains(m1));
+        assertEquals(1, secondAlly.getAlliedWins());
 
-        assertEquals(1, p1.getEnemyMatches().size());
-        assertTrue(p1.getEnemyMatches().contains(m1));
-        assertEquals(1, p1.getEnemyWins());
+        assertEquals(1, firstEnemy.getEnemyMatches().size());
+        assertTrue(firstEnemy.getEnemyMatches().contains(m1));
+        assertEquals(1, firstEnemy.getEnemyWins());
 
-        assertEquals(1, p2.getEnemyMatches().size());
-        assertTrue(p2.getEnemyMatches().contains(m1));
-        assertEquals(1, p2.getEnemyWins());
+        assertEquals(1, secondEnemy.getEnemyMatches().size());
+        assertTrue(secondEnemy.getEnemyMatches().contains(m1));
+        assertEquals(1, secondEnemy.getEnemyWins());
 
+        assertEquals(firstAlly, firstEnemy);
+        assertEquals(secondAlly, secondEnemy);
+
+    }
+
+    public void addUniquePokemon(Pokemon p, MatchHistory mh) {
+
+        m3.setWin();
+        m3.addPokemonByName(p.getName(), TeamSelector.USER, mh);
+        mh.addMatch(m3);
     }
 
 }

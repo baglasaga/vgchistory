@@ -44,30 +44,9 @@ public class MatchHistory {
         return this.elo;
     }
 
-    // EFFECTS: return true if a Pokemon of given name is found in this.pokemonList
-    public boolean canFindName(String name) {
-        for (Pokemon p : this.pokemonList) {
-            if (p.getName().equals(name)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // REQUIRES: canFindName(name) must be true
-    // EFFECTS: returns Pokemon of given name from this.pokemonList
-    public Pokemon findPokemon(String name) {
-        for (Pokemon p : this.pokemonList) {
-            if (p.getName().equals(name)) {
-                return p;
-            }
-        }
-        return null;
-    }
-
     // MODIFIES: this
     // EFFECTS: if p is not already in this.pokemonList, adds it to the list
-    public void addUniquePokemon(Pokemon p) {
+    private void addUniquePokemon(Pokemon p) {
         if (!this.pokemonList.contains(p)) {
             this.pokemonList.add(p);
         }
@@ -75,7 +54,7 @@ public class MatchHistory {
 
     // MODIFIES: this
     // EFFECTS: updates this.pokemonList using given team in match
-    public void updatePokemonList(Match match, TeamSelector team) {
+    private void updatePokemonList(Match match, TeamSelector team) {
         List<Pokemon> pokemonTeam;
         if (team == TeamSelector.USER) {
             pokemonTeam = match.getMyTeam();
@@ -106,7 +85,7 @@ public class MatchHistory {
     // REQUIRES: matches must not be empty
     // MODIFIES: this
     // EFFECTS: updates percentage of Matches in matches that are won
-    public void updateWinRate() {
+    private void updateWinRate() {
         double rawWinRate = (double) this.wins / this.matches.size();
         this.winRate = rawWinRate * 100;
     }

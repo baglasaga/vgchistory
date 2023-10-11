@@ -73,7 +73,6 @@ public class Match {
     }
 
 
-    // REQUIRES: Pokemon of given name must exist in either team (findNameOnEitherTeam(name) must return true)
     // EFFECTS: searches both teams in this and returns Pokemon of given name
     private Pokemon findPokemonOnEitherTeam(String name, PokemonFinder pf) {
         List<Pokemon> bothTeams = new ArrayList<>();
@@ -103,7 +102,7 @@ public class Match {
     // MODIFIES: this, p
     // EFFECTS: adds p to given team, and adds this to p's matches on that team, adding a win for p on that team if the
     // match is won
-    public void addPokemon(Pokemon p, TeamSelector team) {
+    private void addPokemon(Pokemon p, TeamSelector team) {
 
         if (team == TeamSelector.USER) {
             this.myTeam.add(p);

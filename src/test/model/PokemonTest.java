@@ -8,6 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PokemonTest {
 
+    private MatchHistory mh;
+
     private Match m1;
     private Match m2;
 
@@ -15,6 +17,8 @@ public class PokemonTest {
 
     @BeforeEach
     public void setup() {
+        mh = new MatchHistory();
+
         m1 = new Match();
         m2 = new Match();
 
@@ -86,39 +90,34 @@ public class PokemonTest {
     public void testUpdateWinRateNoWins() {
         p1.addMatch(m1, TeamSelector.USER);
         p1.addMatch(m1, TeamSelector.OPPONENT);
-        p1.updateWinRate(TeamSelector.USER);
-        p1.updateWinRate(TeamSelector.OPPONENT);
         assertEquals(0, p1.getAlliedWinRate());
         assertEquals(0, p1.getEnemyWinRate());
     }
 
     @Test
     public void testUpdateAllyWinRateOneWin() {
-        p1.addMatch(m1, TeamSelector.USER);
         p1.addWin(TeamSelector.USER);
-        p1.updateWinRate(TeamSelector.USER);
+        p1.addMatch(m1, TeamSelector.USER);
         assertEquals(100.0, p1.getAlliedWinRate());
     }
 
     @Test
     public void testUpdateEnemyWinRateOneWin() {
-        p1.addMatch(m1, TeamSelector.OPPONENT);
         p1.addWin(TeamSelector.OPPONENT);
-        p1.updateWinRate(TeamSelector.OPPONENT);
+        p1.addMatch(m1, TeamSelector.OPPONENT);
         assertEquals(100.0, p1.getEnemyWinRate());
     }
 
     @Test
     public void testUpdateWinRateOneWinOneLossEachTeam() {
+        p1.addWin(TeamSelector.USER);
+        p1.addWin(TeamSelector.OPPONENT);
         p1.addMatch(m1, TeamSelector.USER);
         p1.addMatch(m2, TeamSelector.USER);
         p1.addMatch(m1, TeamSelector.OPPONENT);
         p1.addMatch(m2, TeamSelector.OPPONENT);
-        p1.addWin(TeamSelector.USER);
-        p1.addWin(TeamSelector.OPPONENT);
 
-        p1.updateWinRate(TeamSelector.USER);
-        p1.updateWinRate(TeamSelector.OPPONENT);
+
 
         assertEquals(50.0, p1.getAlliedWinRate());
         assertEquals(50.0, p1.getEnemyWinRate());

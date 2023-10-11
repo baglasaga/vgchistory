@@ -41,124 +41,13 @@ public class MatchHistoryTest {
 
     }
 
-    @Test
-    public void testAddUniquePokemonOnePokemon() {
-        mh.addUniquePokemon(p1);
-
-        assertEquals(1, mh.getPokemonList().size());
-        assertTrue(mh.getPokemonList().contains(p1));
-    }
-
-    @Test
-    public void testAddUniquePokemonAlreadyInList() {
-        mh.addUniquePokemon(p1);
-        mh.addUniquePokemon(p1);
-
-        assertEquals(1, mh.getPokemonList().size());
-        assertTrue(mh.getPokemonList().contains(p1));
-    }
-
-    @Test
-    public void testAddUniquePokemonAlreadyInListMultipleTimes() {
-        mh.addUniquePokemon(p1);
-        mh.addUniquePokemon(p1);
-        mh.addUniquePokemon(p1);
-        mh.addUniquePokemon(p1);
-
-        assertEquals(1, mh.getPokemonList().size());
-        assertTrue(mh.getPokemonList().contains(p1));
-    }
-
-    @Test
-    public void testAddUniquePokemonMultipleTimes() {
-        mh.addUniquePokemon(p1);
-        mh.addUniquePokemon(p2);
-        mh.addUniquePokemon(p3);
-        mh.addUniquePokemon(p4);
-
-        assertEquals(4, mh.getPokemonList().size());
-        assertTrue(mh.getPokemonList().contains(p1));
-        assertTrue(mh.getPokemonList().contains(p2));
-        assertTrue(mh.getPokemonList().contains(p3));
-        assertTrue(mh.getPokemonList().contains(p4));
-    }
-
-    @Test
-    public void testUpdatePokemonListUserTeamOnePokemon() {
-        m1.setWin();
-
-        m1.addPokemon(p1, TeamSelector.USER);
-        m1.addPokemon(p2, TeamSelector.OPPONENT);
-
-        mh.updatePokemonList(m1, TeamSelector.USER);
-
-        assertEquals(1, mh.getPokemonList().size());
-        assertTrue(mh.getPokemonList().contains(p1));
-        assertFalse(mh.getPokemonList().contains(p2));
-    }
-
-    @Test
-    public void testUpdatePokemonListOpponentTeamOnePokemon() {
-        m1.setWin();
-
-        m1.addPokemon(p1, TeamSelector.USER);
-        m1.addPokemon(p2, TeamSelector.OPPONENT);
-
-        mh.updatePokemonList(m1, TeamSelector.OPPONENT);
-
-        assertEquals(1, mh.getPokemonList().size());
-        assertTrue(mh.getPokemonList().contains(p2));
-        assertFalse(mh.getPokemonList().contains(p1));
-    }
-
-    @Test
-    public void testUpdatePokemonListBothTeamsMultiplePokemon() {
-        m1.setWin();
-
-        m1.addPokemon(p1, TeamSelector.USER);
-        m1.addPokemon(p3, TeamSelector.USER);
-        m1.addPokemon(p2, TeamSelector.OPPONENT);
-        m1.addPokemon(p4, TeamSelector.OPPONENT);
-
-        mh.updatePokemonList(m1, TeamSelector.USER);
-        assertEquals(2, mh.getPokemonList().size());
-        assertTrue(mh.getPokemonList().contains(p1));
-        assertTrue(mh.getPokemonList().contains(p3));
-        assertFalse(mh.getPokemonList().contains(p2));
-        assertFalse(mh.getPokemonList().contains(p4));
-
-        mh.updatePokemonList(m1, TeamSelector.OPPONENT);
-        assertEquals(4, mh.getPokemonList().size());
-        assertTrue(mh.getPokemonList().contains(p2));
-        assertTrue(mh.getPokemonList().contains(p4));
-    }
-
-    @Test
-    public void testUpdatePokemonListBothTeamsMultiplePokemonWithOverlap() {
-        m1.setWin();
-
-        m1.addPokemon(p1, TeamSelector.USER);
-        m1.addPokemon(p3, TeamSelector.USER);
-        m1.addPokemon(p2, TeamSelector.OPPONENT);
-        m1.addPokemon(p3, TeamSelector.OPPONENT);
-
-        mh.updatePokemonList(m1, TeamSelector.USER);
-        assertEquals(2, mh.getPokemonList().size());
-        assertTrue(mh.getPokemonList().contains(p1));
-        assertTrue(mh.getPokemonList().contains(p3));
-        assertFalse(mh.getPokemonList().contains(p2));
-
-        mh.updatePokemonList(m1, TeamSelector.OPPONENT);
-        assertEquals(3, mh.getPokemonList().size());
-        assertTrue(mh.getPokemonList().contains(p2));
-    }
 
     @Test
     public void testAddLostMatchNoEloChange() {
         m1.setLoss();
         m1.setEloChange(0);
-        m1.addPokemon(p1, TeamSelector.USER);
-        m1.addPokemon(p2, TeamSelector.OPPONENT);
+        m1.addPokemonByName(p1.getName(), TeamSelector.USER, mh);
+        m1.addPokemonByName(p2.getName(), TeamSelector.OPPONENT, mh);
 
         mh.addMatch(m1);
 
@@ -167,14 +56,71 @@ public class MatchHistoryTest {
         assertEquals(0, mh.getWins());
 
         assertEquals(2, mh.getPokemonList().size());
+        assertTrue(mh.getPokemonList().contains(m1.getMyTeam().get(0)));
+        assertTrue(mh.getPokemonList().contains(m1.getEnemyTeam().get(0)));
+   }
+
+    @Test
+    public void testAddMatchAddSamePokemonTwice() {
+        m1.setLoss();
+        m1.setEloChange(0);
+        m1.addPokemonByName(p1.getName(), TeamSelector.USER, mh);
+        m1.addPokemonByName(p1.getName(), TeamSelector.OPPONENT, mh);
+
+        mh.addMatch(m1);
+
+        assertEquals(1, mh.getPokemonList().size());
+        assertTrue(mh.getPokemonList().contains(m1.getMyTeam().get(0)));
+    }
+
+    @Test
+    public void testAddMatchAddSamePokemonMultipleTimes() {
+        m1.setLoss();
+        m1.setEloChange(0);
+        m1.addPokemonByName(p1.getName(), TeamSelector.USER, mh);
+        m1.addPokemonByName(p1.getName(), TeamSelector.OPPONENT, mh);
+
+        mh.addMatch(m1);
+
+        m2.setLoss();
+        m2.setEloChange(0);
+        m2.addPokemonByName(p1.getName(), TeamSelector.USER, mh);
+        m2.addPokemonByName(p1.getName(), TeamSelector.OPPONENT, mh);
+
+        mh.addMatch(m2);
+
+        assertEquals(1, mh.getPokemonList().size());
+        assertTrue(mh.getPokemonList().contains(m1.getMyTeam().get(0)));
+    }
+
+    @Test
+    public void testAddMatchAddMultiplePokemonWithOverlap() {
+        m1.setLoss();
+        m1.setEloChange(0);
+        m1.addPokemonByName(p1.getName(), TeamSelector.USER, mh);
+        m1.addPokemonByName(p2.getName(), TeamSelector.OPPONENT, mh);
+
+        mh.addMatch(m1);
+
+        m2.setLoss();
+        m2.setEloChange(0);
+        m2.addPokemonByName(p2.getName(), TeamSelector.USER, mh);
+        m2.addPokemonByName(p3.getName(), TeamSelector.OPPONENT, mh);
+
+        mh.addMatch(m2);
+
+        assertEquals(3, mh.getPokemonList().size());
+        assertTrue(mh.getPokemonList().contains(m1.getMyTeam().get(0)));
+        assertTrue(mh.getPokemonList().contains(m1.getEnemyTeam().get(0)));
+        assertTrue(mh.getPokemonList().contains(m2.getEnemyTeam().get(0)));
     }
 
     @Test
     public void testAddWonMatchWithPositiveEloChange() {
         m1.setWin();
         m1.setEloChange(13);
-        m1.addPokemon(p1, TeamSelector.USER);
-        m1.addPokemon(p2, TeamSelector.OPPONENT);
+        m1.addPokemonByName(p1.getName(), TeamSelector.USER, mh);
+        m1.addPokemonByName(p2.getName(), TeamSelector.OPPONENT, mh);
 
         mh.addMatch(m1);
 
@@ -183,14 +129,16 @@ public class MatchHistoryTest {
         assertEquals(1, mh.getWins());
 
         assertEquals(2, mh.getPokemonList().size());
+
+        assertEquals(100.0, mh.getWinRate());
     }
 
     @Test
     public void testAddLostMatchWithNegativeEloChange() {
         m1.setLoss();
         m1.setEloChange(-22);
-        m1.addPokemon(p1, TeamSelector.USER);
-        m1.addPokemon(p2, TeamSelector.OPPONENT);
+        m1.addPokemonByName(p1.getName(), TeamSelector.USER, mh);
+        m1.addPokemonByName(p2.getName(), TeamSelector.OPPONENT, mh);
 
         mh.addMatch(m1);
 
@@ -199,14 +147,16 @@ public class MatchHistoryTest {
         assertEquals(0, mh.getWins());
 
         assertEquals(2, mh.getPokemonList().size());
+
+        assertEquals(0, mh.getWinRate());
     }
 
     @Test
     public void testAddMultipleWonMatches() {
         m1.setWin();
         m1.setEloChange(13);
-        m1.addPokemon(p1, TeamSelector.USER);
-        m1.addPokemon(p2, TeamSelector.OPPONENT);
+        m1.addPokemonByName(p1.getName(), TeamSelector.USER, mh);
+        m1.addPokemonByName(p2.getName(), TeamSelector.OPPONENT, mh);
 
         mh.addMatch(m1);
 
@@ -218,8 +168,8 @@ public class MatchHistoryTest {
 
         m2.setWin();
         m2.setEloChange(12);
-        m2.addPokemon(p1, TeamSelector.USER);
-        m2.addPokemon(p3, TeamSelector.OPPONENT);
+        m2.addPokemonByName(p1.getName(), TeamSelector.USER, mh);
+        m2.addPokemonByName(p3.getName(), TeamSelector.OPPONENT, mh);
 
         mh.addMatch(m2);
 
@@ -228,14 +178,16 @@ public class MatchHistoryTest {
         assertEquals(2, mh.getWins());
 
         assertEquals(3, mh.getPokemonList().size());
+
+        assertEquals(100.0, mh.getWinRate());
     }
 
     @Test
     public void testAddMultipleLostMatches() {
         m1.setLoss();
         m1.setEloChange(-13);
-        m1.addPokemon(p1, TeamSelector.USER);
-        m1.addPokemon(p2, TeamSelector.OPPONENT);
+        m1.addPokemonByName(p1.getName(), TeamSelector.USER, mh);
+        m1.addPokemonByName(p2.getName(), TeamSelector.OPPONENT, mh);
 
         mh.addMatch(m1);
 
@@ -247,8 +199,8 @@ public class MatchHistoryTest {
 
         m2.setLoss();
         m2.setEloChange(-12);
-        m2.addPokemon(p1, TeamSelector.USER);
-        m2.addPokemon(p3, TeamSelector.OPPONENT);
+        m2.addPokemonByName(p1.getName(), TeamSelector.USER, mh);
+        m2.addPokemonByName(p3.getName(), TeamSelector.OPPONENT, mh);
 
         mh.addMatch(m2);
 
@@ -257,14 +209,16 @@ public class MatchHistoryTest {
         assertEquals(0, mh.getWins());
 
         assertEquals(3, mh.getPokemonList().size());
+
+        assertEquals(0, mh.getWinRate());
     }
 
     @Test
     public void testAddMatchOneWinOneLoss() {
         m1.setWin();
         m1.setEloChange(13);
-        m1.addPokemon(p1, TeamSelector.USER);
-        m1.addPokemon(p2, TeamSelector.OPPONENT);
+        m1.addPokemonByName(p1.getName(), TeamSelector.USER, mh);
+        m1.addPokemonByName(p2.getName(), TeamSelector.OPPONENT, mh);
 
         mh.addMatch(m1);
 
@@ -276,8 +230,8 @@ public class MatchHistoryTest {
 
         m2.setLoss();
         m2.setEloChange(-12);
-        m2.addPokemon(p1, TeamSelector.USER);
-        m2.addPokemon(p3, TeamSelector.OPPONENT);
+        m2.addPokemonByName(p1.getName(), TeamSelector.USER, mh);
+        m2.addPokemonByName(p3.getName(), TeamSelector.OPPONENT, mh);
 
         mh.addMatch(m2);
 
@@ -286,54 +240,6 @@ public class MatchHistoryTest {
         assertEquals(1, mh.getWins());
 
         assertEquals(3, mh.getPokemonList().size());
-    }
-
-    @Test
-    public void testCanFindName() {
-        mh.addUniquePokemon(p1);
-        assertTrue(mh.canFindName("Ogerpon-Hearthflame"));
-        assertFalse(mh.canFindName("Salamence"));
-    }
-
-    @Test
-    public void testFindPokemon() {
-        mh.addUniquePokemon(p1);
-        assertEquals(p1, mh.findPokemon("Ogerpon-Hearthflame"));
-    }
-
-    @Test
-    public void testCantFindPokemon() {
-        // this test goes against the REQUIRES clause of this method, but is here for coverage
-        assertNull(mh.findPokemon("Pikachu"));
-    }
-
-    @Test
-    public void testUpdateWinRateNoWins() {
-        m1.setLoss();
-        mh.addMatch(m1);
-
-        mh.updateWinRate();
-
-        assertEquals(0, mh.getWinRate());
-    }
-
-    @Test
-    public void testUpdateWinRateOneWin() {
-        m1.setWin();
-        mh.addMatch(m1);
-
-        mh.updateWinRate();
-
-        assertEquals(100.0, mh.getWinRate());
-    }
-
-    @Test
-    public void testUpdateWinRateOneWinOneLoss() {
-        m1.setWin();
-        mh.addMatch(m1);
-        m2.setLoss();
-        mh.addMatch(m2);
-        mh.updateWinRate();
 
         assertEquals(50.0, mh.getWinRate());
     }
@@ -341,158 +247,213 @@ public class MatchHistoryTest {
     @Test
     public void testGetHighestWinRatesOnePokemon() {
         m1.setWin();
-        p1.addMatch(m1, TeamSelector.USER);
-        p1.updateWinRate(TeamSelector.USER);
-        p1.addMatch(m1, TeamSelector.OPPONENT);
-        p1.updateWinRate(TeamSelector.OPPONENT);
-        mh.addUniquePokemon(p1);
+        m1.addPokemonByName(p1.getName(), TeamSelector.USER, mh);
+        m1.addPokemonByName(p1.getName(), TeamSelector.OPPONENT, mh);
+
+        mh.addMatch(m1);
 
         List<Pokemon> pokemonList = mh.getHighestWinRates(1, TeamSelector.USER);
         assertEquals(1, pokemonList.size());
-        assertTrue(pokemonList.contains(p1));
+        assertTrue(pokemonList.contains(m1.getMyTeam().get(0)));
 
         List<Pokemon> pokemonList2 = mh.getHighestWinRates(1, TeamSelector.OPPONENT);
         assertEquals(1, pokemonList2.size());
-        assertTrue(pokemonList2.contains(p1));
+        assertTrue(pokemonList2.contains(m1.getEnemyTeam().get(0)));
     }
 
     @Test
     public void testGetLowestWinRatesOnePokemon() {
-        p1.setAlliedWinRate(100);
-        p1.setEnemyWinRate(100);
-        mh.addUniquePokemon(p1);
+        m1.setLoss();
+        m1.addPokemonByName(p1.getName(), TeamSelector.USER, mh);
+        Pokemon firstPokemon = m1.getMyTeam().get(0);
+        mh.addMatch(m1);
+
+        firstPokemon.setAlliedWinRate(100);
+        firstPokemon.setEnemyWinRate(100);
 
         List<Pokemon> pokemonList = mh.getLowestWinRates(1, TeamSelector.USER);
         assertEquals(1, pokemonList.size());
-        assertTrue(pokemonList.contains(p1));
+        assertTrue(pokemonList.contains(firstPokemon));
 
         List<Pokemon> pokemonList2 = mh.getLowestWinRates(1, TeamSelector.OPPONENT);
         assertEquals(1, pokemonList2.size());
-        assertTrue(pokemonList2.contains(p1));
+        assertTrue(pokemonList2.contains(firstPokemon));
     }
 
     @Test
     public void testGetHighestOneWinRateFirstPokemonHighest() {
-        p1.setAlliedWinRate(100);
-        p2.setAlliedWinRate(50);
-        p3.setAlliedWinRate(33.333);
+        m1.setLoss();
+        m1.addPokemonByName(p1.getName(), TeamSelector.USER, mh);
+        m1.addPokemonByName(p2.getName(), TeamSelector.USER, mh);
+        m1.addPokemonByName(p3.getName(), TeamSelector.USER, mh);
+        mh.addMatch(m1);
 
-        mh.addUniquePokemon(p1);
-        mh.addUniquePokemon(p2);
-        mh.addUniquePokemon(p3);
+        Pokemon firstPokemon = m1.getMyTeam().get(0);
+        Pokemon secondPokemon = m1.getMyTeam().get(1);
+        Pokemon thirdPokemon = m1.getMyTeam().get(2);
+
+        firstPokemon.setAlliedWinRate(100);
+        secondPokemon.setAlliedWinRate(50);
+        thirdPokemon.setAlliedWinRate(33.333);
 
         List<Pokemon> pokemonList = mh.getHighestWinRates(1, TeamSelector.USER);
         assertEquals(1, pokemonList.size());
-        assertTrue(pokemonList.contains(p1));
+        assertTrue(pokemonList.contains(firstPokemon));
     }
 
     @Test
     public void testGetHighestOneWinRateLastPokemonHighest() {
-        p1.setAlliedWinRate(33.333);
-        p2.setAlliedWinRate(50);
-        p3.setAlliedWinRate(100);
+        m1.setLoss();
+        m1.addPokemonByName(p1.getName(), TeamSelector.USER, mh);
+        m1.addPokemonByName(p2.getName(), TeamSelector.USER, mh);
+        m1.addPokemonByName(p3.getName(), TeamSelector.USER, mh);
+        mh.addMatch(m1);
 
-        mh.addUniquePokemon(p1);
-        mh.addUniquePokemon(p2);
-        mh.addUniquePokemon(p3);
+        Pokemon firstPokemon = m1.getMyTeam().get(0);
+        Pokemon secondPokemon = m1.getMyTeam().get(1);
+        Pokemon thirdPokemon = m1.getMyTeam().get(2);
+
+        firstPokemon.setAlliedWinRate(33.333);
+        secondPokemon.setAlliedWinRate(50);
+        thirdPokemon.setAlliedWinRate(100);
+
+
 
         List<Pokemon> pokemonList = mh.getHighestWinRates(1, TeamSelector.USER);
         assertEquals(1, pokemonList.size());
-        assertTrue(pokemonList.contains(p3));
+        assertTrue(pokemonList.contains(thirdPokemon));
     }
 
     @Test
     public void testGetHighestOneWinRateWithTie() {
-        p1.setAlliedWinRate(33.333);
-        p2.setAlliedWinRate(50);
-        p3.setAlliedWinRate(50);
+        m1.setLoss();
+        m1.addPokemonByName(p1.getName(), TeamSelector.USER, mh);
+        m1.addPokemonByName(p2.getName(), TeamSelector.USER, mh);
+        m1.addPokemonByName(p3.getName(), TeamSelector.USER, mh);
+        mh.addMatch(m1);
 
-        mh.addUniquePokemon(p1);
-        mh.addUniquePokemon(p2);
-        mh.addUniquePokemon(p3);
+        Pokemon firstPokemon = m1.getMyTeam().get(0);
+        Pokemon secondPokemon = m1.getMyTeam().get(1);
+        Pokemon thirdPokemon = m1.getMyTeam().get(2);
+
+        firstPokemon.setAlliedWinRate(33.333);
+        secondPokemon.setAlliedWinRate(50);
+        thirdPokemon.setAlliedWinRate(50);
 
         List<Pokemon> pokemonList = mh.getHighestWinRates(1, TeamSelector.USER);
         assertEquals(1, pokemonList.size());
-        assertTrue(pokemonList.contains(p2));
+        assertTrue(pokemonList.contains(secondPokemon));
     }
 
     @Test
     public void testGetHighestAllWinRates() {
-        p1.setAlliedWinRate(100);
-        p2.setAlliedWinRate(50);
-        p3.setAlliedWinRate(75);
+        m1.setLoss();
+        m1.addPokemonByName(p1.getName(), TeamSelector.USER, mh);
+        m1.addPokemonByName(p2.getName(), TeamSelector.USER, mh);
+        m1.addPokemonByName(p3.getName(), TeamSelector.USER, mh);
+        mh.addMatch(m1);
 
-        mh.addUniquePokemon(p1);
-        mh.addUniquePokemon(p2);
-        mh.addUniquePokemon(p3);
+        Pokemon firstPokemon = m1.getMyTeam().get(0);
+        Pokemon secondPokemon = m1.getMyTeam().get(1);
+        Pokemon thirdPokemon = m1.getMyTeam().get(2);
+
+        firstPokemon.setAlliedWinRate(100);
+        secondPokemon.setAlliedWinRate(50);
+        thirdPokemon.setAlliedWinRate(75);
+
 
         List<Pokemon> pokemonList = mh.getHighestWinRates(3, TeamSelector.USER);
         assertEquals(3, pokemonList.size());
-        assertEquals(p1, pokemonList.get(0));
-        assertEquals(p3, pokemonList.get(1));
-        assertEquals(p2, pokemonList.get(2));
+        assertEquals(firstPokemon, pokemonList.get(0));
+        assertEquals(thirdPokemon, pokemonList.get(1));
+        assertEquals(secondPokemon, pokemonList.get(2));
     }
 
     @Test
     public void testGetLowestOneWinRateFirstPokemonLowest() {
-        p1.setEnemyWinRate(25);
-        p2.setEnemyWinRate(50);
-        p3.setEnemyWinRate(33.333);
+        m1.setLoss();
+        m1.addPokemonByName(p1.getName(), TeamSelector.OPPONENT, mh);
+        m1.addPokemonByName(p2.getName(), TeamSelector.OPPONENT, mh);
+        m1.addPokemonByName(p3.getName(), TeamSelector.OPPONENT, mh);
+        mh.addMatch(m1);
 
-        mh.addUniquePokemon(p1);
-        mh.addUniquePokemon(p2);
-        mh.addUniquePokemon(p3);
+        Pokemon firstPokemon = m1.getEnemyTeam().get(0);
+        Pokemon secondPokemon = m1.getEnemyTeam().get(1);
+        Pokemon thirdPokemon = m1.getEnemyTeam().get(2);
+
+        firstPokemon.setEnemyWinRate(25);
+        secondPokemon.setEnemyWinRate(50);
+        thirdPokemon.setEnemyWinRate(33.333);
+
 
         List<Pokemon> pokemonList = mh.getLowestWinRates(1, TeamSelector.OPPONENT);
         assertEquals(1, pokemonList.size());
-        assertTrue(pokemonList.contains(p1));
+        assertTrue(pokemonList.contains(firstPokemon));
     }
 
     @Test
     public void testGetLowestOneWinRateLastPokemonLowest() {
-        p1.setEnemyWinRate(33.333);
-        p2.setEnemyWinRate(50);
-        p3.setEnemyWinRate(25);
+        m1.setLoss();
+        m1.addPokemonByName(p1.getName(), TeamSelector.OPPONENT, mh);
+        m1.addPokemonByName(p2.getName(), TeamSelector.OPPONENT, mh);
+        m1.addPokemonByName(p3.getName(), TeamSelector.OPPONENT, mh);
+        mh.addMatch(m1);
 
-        mh.addUniquePokemon(p1);
-        mh.addUniquePokemon(p2);
-        mh.addUniquePokemon(p3);
+        Pokemon firstPokemon = m1.getEnemyTeam().get(0);
+        Pokemon secondPokemon = m1.getEnemyTeam().get(1);
+        Pokemon thirdPokemon = m1.getEnemyTeam().get(2);
+
+        firstPokemon.setEnemyWinRate(33.333);
+        secondPokemon.setEnemyWinRate(50);
+        thirdPokemon.setEnemyWinRate(25);
 
         List<Pokemon> pokemonList = mh.getLowestWinRates(1, TeamSelector.OPPONENT);
         assertEquals(1, pokemonList.size());
-        assertTrue(pokemonList.contains(p3));
+        assertTrue(pokemonList.contains(thirdPokemon));
     }
 
     @Test
     public void testGetLowestOneWinRateWithTie() {
-        p1.setEnemyWinRate(33.333);
-        p2.setEnemyWinRate(25);
-        p3.setEnemyWinRate(25);
+        m1.setLoss();
+        m1.addPokemonByName(p1.getName(), TeamSelector.OPPONENT, mh);
+        m1.addPokemonByName(p2.getName(), TeamSelector.OPPONENT, mh);
+        m1.addPokemonByName(p3.getName(), TeamSelector.OPPONENT, mh);
+        mh.addMatch(m1);
 
-        mh.addUniquePokemon(p1);
-        mh.addUniquePokemon(p2);
-        mh.addUniquePokemon(p3);
+        Pokemon firstPokemon = m1.getEnemyTeam().get(0);
+        Pokemon secondPokemon = m1.getEnemyTeam().get(1);
+        Pokemon thirdPokemon = m1.getEnemyTeam().get(2);
+
+        firstPokemon.setEnemyWinRate(33.333);
+        secondPokemon.setEnemyWinRate(25);
+        thirdPokemon.setEnemyWinRate(25);
 
         List<Pokemon> pokemonList = mh.getLowestWinRates(1, TeamSelector.OPPONENT);
         assertEquals(1, pokemonList.size());
-        assertTrue(pokemonList.contains(p2));
+        assertTrue(pokemonList.contains(secondPokemon));
     }
 
     @Test
     public void testGetLowestAllWinRates() {
-        p1.setEnemyWinRate(100);
-        p2.setEnemyWinRate(50);
-        p3.setEnemyWinRate(75);
+        m1.setLoss();
+        m1.addPokemonByName(p1.getName(), TeamSelector.OPPONENT, mh);
+        m1.addPokemonByName(p2.getName(), TeamSelector.OPPONENT, mh);
+        m1.addPokemonByName(p3.getName(), TeamSelector.OPPONENT, mh);
+        mh.addMatch(m1);
 
-        mh.addUniquePokemon(p1);
-        mh.addUniquePokemon(p2);
-        mh.addUniquePokemon(p3);
+        Pokemon firstPokemon = m1.getEnemyTeam().get(0);
+        Pokemon secondPokemon = m1.getEnemyTeam().get(1);
+        Pokemon thirdPokemon = m1.getEnemyTeam().get(2);
+
+        firstPokemon.setEnemyWinRate(100);
+        secondPokemon.setEnemyWinRate(50);
+        thirdPokemon.setEnemyWinRate(75);
 
         List<Pokemon> pokemonList = mh.getLowestWinRates(3, TeamSelector.OPPONENT);
         assertEquals(3, pokemonList.size());
-        assertEquals(p2, pokemonList.get(0));
-        assertEquals(p3, pokemonList.get(1));
-        assertEquals(p1, pokemonList.get(2));
+        assertEquals(secondPokemon, pokemonList.get(0));
+        assertEquals(thirdPokemon, pokemonList.get(1));
+        assertEquals(firstPokemon, pokemonList.get(2));
     }
 
 }
