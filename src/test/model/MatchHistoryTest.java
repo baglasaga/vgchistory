@@ -266,6 +266,8 @@ public class MatchHistoryTest {
         m1.setLoss();
         m1.addPokemonByName(p1.getName(), TeamSelector.USER, mh);
         Pokemon firstPokemon = m1.getMyTeam().get(0);
+        m1.addPokemonByName(p1.getName(), TeamSelector.OPPONENT, mh);
+        assertTrue(m1.getEnemyTeam().contains(firstPokemon));
         mh.addMatch(m1);
 
         firstPokemon.setAlliedWinRate(100);
@@ -370,6 +372,40 @@ public class MatchHistoryTest {
     }
 
     @Test
+    public void testGetHighestPokemonNoPokemonWithUsage() {
+        m1.setLoss();
+        m1.addPokemonByName(p1.getName(), TeamSelector.OPPONENT, mh);
+        m1.addPokemonByName(p2.getName(), TeamSelector.OPPONENT, mh);
+        m1.addPokemonByName(p3.getName(), TeamSelector.OPPONENT, mh);
+        mh.addMatch(m1);
+
+
+        List<Pokemon> result = mh.getHighestWinRates(3, TeamSelector.USER);
+
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    public void testGetHighestPokemonOnePokemonWithUsage() {
+        m1.setLoss();
+        m1.addPokemonByName(p1.getName(), TeamSelector.OPPONENT, mh);
+        m1.addPokemonByName(p2.getName(), TeamSelector.OPPONENT, mh);
+        m1.addPokemonByName(p3.getName(), TeamSelector.USER, mh);
+        mh.addMatch(m1);
+
+        Pokemon firstPokemon = m1.getEnemyTeam().get(0);
+        Pokemon secondPokemon = m1.getEnemyTeam().get(1);
+        Pokemon thirdPokemon = m1.getMyTeam().get(0);
+
+        List<Pokemon> result = mh.getHighestWinRates(3, TeamSelector.USER);
+
+        assertEquals(1, result.size());
+        assertEquals(thirdPokemon, result.get(0));
+        assertFalse(result.contains(firstPokemon));
+        assertFalse(result.contains(secondPokemon));
+    }
+
+    @Test
     public void testGetLowestOneWinRateFirstPokemonLowest() {
         m1.setLoss();
         m1.addPokemonByName(p1.getName(), TeamSelector.OPPONENT, mh);
@@ -454,6 +490,39 @@ public class MatchHistoryTest {
         assertEquals(secondPokemon, pokemonList.get(0));
         assertEquals(thirdPokemon, pokemonList.get(1));
         assertEquals(firstPokemon, pokemonList.get(2));
+    }
+
+    @Test
+    public void testGetLowestPokemonNoPokemonWithUsage() {
+        m1.setLoss();
+        m1.addPokemonByName(p1.getName(), TeamSelector.USER, mh);
+        m1.addPokemonByName(p2.getName(), TeamSelector.USER, mh);
+        m1.addPokemonByName(p3.getName(), TeamSelector.USER, mh);
+        mh.addMatch(m1);
+
+        List<Pokemon> result = mh.getLowestWinRates(3, TeamSelector.OPPONENT);
+
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    public void testGetLowestPokemonOnePokemonWithUsage() {
+        m1.setLoss();
+        m1.addPokemonByName(p1.getName(), TeamSelector.USER, mh);
+        m1.addPokemonByName(p2.getName(), TeamSelector.USER, mh);
+        m1.addPokemonByName(p3.getName(), TeamSelector.OPPONENT, mh);
+        mh.addMatch(m1);
+
+        Pokemon firstPokemon = m1.getMyTeam().get(0);
+        Pokemon secondPokemon = m1.getMyTeam().get(1);
+        Pokemon thirdPokemon = m1.getEnemyTeam().get(0);
+
+        List<Pokemon> result = mh.getLowestWinRates(3, TeamSelector.OPPONENT);
+
+        assertEquals(1, result.size());
+        assertEquals(thirdPokemon, result.get(0));
+        assertFalse(result.contains(firstPokemon));
+        assertFalse(result.contains(secondPokemon));
     }
 
 }

@@ -90,59 +90,98 @@ public class MatchHistory {
         this.winRate = rawWinRate * 100;
     }
 
+    // EFFECTS: return true if given Pokemon has at least one match played on given team
+    private boolean usedOnTeam(Pokemon p, TeamSelector team) {
+        List<Match> matches;
+        if (team == TeamSelector.USER) {
+            matches = p.getAlliedMatches();
+        } else {
+            matches = p.getEnemyMatches();
+        }
+
+        return matches.size() > 0;
+    }
+
+    // EFFECTS: filters out all Pokemon in given list that have 0 matches on the given team
+    private List<Pokemon> getUsedOnTeam(List<Pokemon> list, TeamSelector team) {
+        List<Pokemon> result = new ArrayList<>();
+        for (Pokemon p : list) {
+            if (usedOnTeam(p, team)) {
+                result.add(p);
+            }
+        }
+        return result;
+    }
+
+    // REQUIRES: !pokemonList.isEmpty()
+    // EFFECTS: returns Pokemon in given list with the highest win-rate on given team
+    private Pokemon returnHighestWinRate(List<Pokemon> pokemonList, TeamSelector team) {
+        Pokemon highestPokemon = pokemonList.get(0);
+        for (Pokemon p : pokemonList) {
+            double wr;
+            double highest;
+            if (team == TeamSelector.USER) {
+                wr = p.getAlliedWinRate();
+                highest = highestPokemon.getAlliedWinRate();
+            } else {
+                wr = p.getEnemyWinRate();
+                highest = highestPokemon.getEnemyWinRate();
+            }
+            if (highest < wr) {
+                highestPokemon = p;
+            }
+        }
+        return highestPokemon;
+    }
+
+    // REQUIRES: !pokemonList.isEmpty()
+    // EFFECTS: returns Pokemon in given list with the lowest win-rate on given team
+    private Pokemon returnLowestWinRate(List<Pokemon> pokemonList, TeamSelector team) {
+        Pokemon highestPokemon = pokemonList.get(0);
+        for (Pokemon p : pokemonList) {
+            double wr;
+            double lowest;
+            if (team == TeamSelector.USER) {
+                wr = p.getAlliedWinRate();
+                lowest = highestPokemon.getAlliedWinRate();
+            } else {
+                wr = p.getEnemyWinRate();
+                lowest = highestPokemon.getEnemyWinRate();
+            }
+            if (lowest > wr) {
+                highestPokemon = p;
+            }
+        }
+        return highestPokemon;
+    }
+
     // REQUIRES: n <= this.pokemonList.size(), n > 0
-    // EFFECTS: returns list of the n highest win-rate Pokemon on given team, picks the first win-rate as higher in case
-    //          of a tie
+    // EFFECTS: returns list of the n highest win-rate Pokemon that have usage on given team,
+    //          picks the first win-rate as higher in case of a tie
     public List<Pokemon> getHighestWinRates(int n, TeamSelector team) {
         List<Pokemon> pokemonList = new ArrayList<>(this.pokemonList);
         List<Pokemon> resultList = new ArrayList<>();
-        for (int i = 0; i < n; i++) {
-            Pokemon highestPokemon = pokemonList.get(0);
-            for (Pokemon p : pokemonList) {
-                double wr;
-                double highest;
-                if (team == TeamSelector.USER) {
-                    wr = p.getAlliedWinRate();
-                    highest = highestPokemon.getAlliedWinRate();
-                } else {
-                    wr = p.getEnemyWinRate();
-                    highest = highestPokemon.getEnemyWinRate();
-                }
-                if (highest < wr) {
-                    highestPokemon = p;
-                }
-            }
+
+        for (int i = 0; i < n; i++) { 
+            Pokemon highestPokemon = returnHighestWinRate(pokemonList, team);
             resultList.add(highestPokemon);
             pokemonList.remove(highestPokemon);
         }
-        return resultList;
+        return getUsedOnTeam(resultList, team);
     }
 
     // REQUIRES: n <= this.pokemonList.size()
-    // EFFECTS: returns list of the n lowest win-rate Pokemon on given team
+    // EFFECTS: returns list of the n lowest win-rate Pokemon on given team that
+    //          have usage on that team, picks the first win-rate to be the lowest in case of a tie
     public List<Pokemon> getLowestWinRates(int n, TeamSelector team) {
         List<Pokemon> pokemonList = new ArrayList<>(this.pokemonList);
         List<Pokemon> resultList = new ArrayList<>();
-        for (int i = 0; i < n; i++) {
-            Pokemon highestPokemon = pokemonList.get(0);
-            for (Pokemon p : pokemonList) {
-                double wr;
-                double highest;
-                if (team == TeamSelector.USER) {
-                    wr = p.getAlliedWinRate();
-                    highest = highestPokemon.getAlliedWinRate();
-                } else {
-                    wr = p.getEnemyWinRate();
-                    highest = highestPokemon.getEnemyWinRate();
-                }
-                if (highest > wr) {
-                    highestPokemon = p;
-                }
-            }
-            resultList.add(highestPokemon);
-            pokemonList.remove(highestPokemon);
-        }
-        return resultList;
-    }
 
+        for (int i = 0; i < n; i++) {
+            Pokemon lowestPokemon = returnLowestWinRate(pokemonList, team);
+            resultList.add(lowestPokemon);
+            pokemonList.remove(lowestPokemon);
+        }
+        return getUsedOnTeam(resultList, team);
+    }
 }
