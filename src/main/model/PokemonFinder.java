@@ -20,7 +20,7 @@ public class PokemonFinder {
         return false;
     }
 
-    // EFFECTS: returns Pokemon of given name from this.pokemonList
+    // EFFECTS: returns Pokemon of given name from this.pokemonList; null if Pokemon can't be found
     public Pokemon findPokemon(String name, List<Pokemon> list) {
         for (Pokemon p : list) {
             if (p.getName().equals(name)) {

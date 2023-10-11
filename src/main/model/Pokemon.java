@@ -68,6 +68,8 @@ public class Pokemon {
         this.enemyWinRate = wr;
     }
 
+    // MODIFIES: this
+    // EFFECTS: adds 1 win to this Pokemon's wins on given team
     public void addWin(TeamSelector team) {
         if (team == TeamSelector.USER) {
             this.alliedWins++;
