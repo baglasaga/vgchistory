@@ -102,7 +102,8 @@ public class MatchHistory {
         return matches.size() > 0;
     }
 
-    // EFFECTS: filters out all Pokemon in given list that have 0 matches on the given team
+    // EFFECTS: filters out all Pokemon in given list that have 0 matches on the given team, and returns
+    //          the filtered list
     private List<Pokemon> getUsedOnTeam(List<Pokemon> list, TeamSelector team) {
         List<Pokemon> result = new ArrayList<>();
         for (Pokemon p : list) {

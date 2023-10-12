@@ -5,16 +5,20 @@ import model.*;
 import java.util.List;
 import java.util.Scanner;
 
+// Match History Viewer app
 public class MatchHistoryViewer {
     private static final int MAX_POKEMON_PER_TEAM = 4;
     private MatchHistory mh;
     private PokemonFinder pf;
     private Scanner input;
 
+    // EFFECTS: runs the app
     public MatchHistoryViewer() {
         runMatchHistory();
     }
 
+    // MODIFIES: this
+    // EFFECTS: processes user input
     private void runMatchHistory() {
         boolean running = true;
         String command = null;
@@ -34,12 +38,14 @@ public class MatchHistoryViewer {
         System.out.println("\nClosing...");
     }
 
+    // EFFECTS: initializes Match History
     private void start() {
         mh = new MatchHistory();
         pf = new PokemonFinder();
         input = new Scanner(System.in);
     }
 
+    // EFFECTS: displays menu of options to user
     private void displayMenu() {
         System.out.println("\nSelect an option:");
         System.out.println("\na -> add a match");
@@ -49,6 +55,8 @@ public class MatchHistoryViewer {
         System.out.println("\nq -> quit");
     }
 
+    // MODIFIES: this
+    // EFFECTS: processes user input
     private void processCommand(String command) {
         if (command.equals("a")) {
             addMatch();
@@ -63,6 +71,8 @@ public class MatchHistoryViewer {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: adds a match to the match history
     private void addMatch() {
         Match match = new Match();
 
@@ -81,6 +91,8 @@ public class MatchHistoryViewer {
 
     }
 
+    // MODIFIES: this
+    // EFFECTS: processes if the processed match was won or lost
     private void processWinStatus(Match match) {
         System.out.println("Did you win (enter w) or lose (enter l)?\n");
         boolean choosing = true;
@@ -99,6 +111,8 @@ public class MatchHistoryViewer {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: adds a team to the processed match
     private void addTeam(Match match, TeamSelector team) {
         String prompt;
         if (team == TeamSelector.USER) {
@@ -113,6 +127,7 @@ public class MatchHistoryViewer {
         }
     }
 
+    // EFFECTS: displays information about every match added to the match history
     private void displayMatches() {
         String winLoss;
         String eloPrefix;
@@ -139,6 +154,8 @@ public class MatchHistoryViewer {
         }
     }
 
+    // EFFECTS: displays options to the user about how to sort the Pokemon statistics, and processes
+    //          their input
     private void pokemonStatsOptions() {
         String command;
         boolean choosing = true;
@@ -160,6 +177,7 @@ public class MatchHistoryViewer {
         }
     }
 
+    // EFFECTS: displays choice on how many Pokemon to show
     private void showNumberOptions(TeamSelector team) {
         System.out.println("\nHow many Pokemon would you like to be displayed?");
         System.out.println("\na -> all");
@@ -167,6 +185,7 @@ public class MatchHistoryViewer {
         chooseNumberPokemon(team);
     }
 
+    // EFFECTS: processes user input on how many Pokemon to show
     private void chooseNumberPokemon(TeamSelector team) {
         boolean choosing = true;
         String command;
@@ -192,6 +211,7 @@ public class MatchHistoryViewer {
         chooseHighestOrLowest(team, num);
     }
 
+    // EFFECTS: displays options of how to sort the displayed Pokemon, and processes their input
     private void chooseHighestOrLowest(TeamSelector team, int num) {
         String command;
         boolean choosing = true;
@@ -213,12 +233,14 @@ public class MatchHistoryViewer {
         }
     }
 
+    // EFFECTS: displays the given list of Pokemon
     private void displayPokemonList(List<Pokemon> list) {
         for (Pokemon p : list) {
             displayPokemon(p);
         }
     }
 
+    // EFFECTS: displays information about given Pokemon
     private void displayPokemon(Pokemon p) {
         System.out.println("\n[" + p.getName() + "]");
         System.out.println("\n Win-rate with: " + p.getAlliedWinRate());
@@ -229,6 +251,7 @@ public class MatchHistoryViewer {
         System.out.println("\n Games played against: " + p.getEnemyMatches().size());
     }
 
+    // EFFECTS: looks for and displays Pokemon of name inputted by user, if it exists
     private void searchPokemon() {
         if (mh.getPokemonList().isEmpty()) {
             System.out.println("There are no Pokemon here! Add some matches first.");

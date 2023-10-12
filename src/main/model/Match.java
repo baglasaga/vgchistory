@@ -83,7 +83,7 @@ public class Match {
 
     // REQUIRES: this.win !== null (setWin() or setLoss() must be called first), Pokemon of given name is not already
     //           on given team
-    // MODIFIES: this
+    // MODIFIES: this, pf.findPokemon(name, mh.getPokemonList()) or findPokemonOnEitherTeam(name, pf) if they exist
     // EFFECTS: if Pokemon of given name is in mh.getPokemonList() or already in this match,
     //          adds that Pokemon to the given team in the match. otherwise, creates new Pokemon with given name
     //          and adds to the given team in the match

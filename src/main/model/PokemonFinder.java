@@ -5,6 +5,7 @@ import java.util.List;
 // handles methods involving searching for and returning Pokemon from a list
 public class PokemonFinder {
 
+    // EFFECTS: constructs a PokemonFinder
     public PokemonFinder() {
 
     }
