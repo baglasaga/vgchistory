@@ -33,3 +33,6 @@ the highest/lowest win-rates on/against my team
 - As a user, I want to be able to see my current in-game rating
 - As a user, I want to be able to search for a Pokemon in my match history
 to find its statistics
+- As a user, I want to have the option to save my entire match history to file
+- As a user, I want to have the option to reload a pre-saved match history from file to resume 
+exactly where I left off
