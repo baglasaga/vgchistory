@@ -2,13 +2,14 @@ package model;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import persistence.Writable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 // represents a list of Matches, with a number of wins, a win-rate, a list of unique Pokemon used over every Match,
 // and the user's overall elo (rating)
-public class MatchHistory {
+public class MatchHistory implements Writable {
 
     private final List<Match> matches;
     private final List<Pokemon> pokemonList;
