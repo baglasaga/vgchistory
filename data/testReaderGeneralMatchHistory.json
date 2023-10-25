@@ -1,0 +1,68 @@
+{
+    "matches": [
+      {
+        "win": true,
+        "eloChange": 13,
+        "myTeam": [
+          {
+            "name": "Ogerpon"
+          },
+          {
+            "name": "Tornadus"
+          },
+          {
+            "name": "Flutter Mane"
+          },
+          {
+            "name": "Munkidori"
+          }
+        ],
+        "enemyTeam": [
+          {
+            "name": "Iron Bundle"
+          },
+          {
+            "name": "Ninetales-Alola"
+          },
+          {
+            "name": "Flutter Mane"
+          },
+          {
+            "name": "Iron Hands"
+          }
+        ]
+      },
+      {
+        "win": false,
+        "eloChange": -12,
+        "myTeam" : [
+          {
+            "name": "Rillaboom"
+          },
+          {
+            "name": "Milotic"
+          },
+          {
+            "name": "Flutter Mane"
+          },
+          {
+            "name": "Munkidori"
+          }
+        ],
+        "enemyTeam": [
+          {
+            "name": "Iron Bundle"
+          },
+          {
+            "name": "Ninetales-Alola"
+          },
+          {
+            "name": "Flutter Mane"
+          },
+          {
+            "name": "Iron Hands"
+          }
+        ]
+      }
+    ]
+}

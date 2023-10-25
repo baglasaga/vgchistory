@@ -1,11 +1,15 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.ArrayList;
 import java.util.List;
 
 // represents a Pokemon match, with a match ID, whether the match was won or lost, the Pokemon used on the user's
 // team and their opponent's team, and the elo gained or lost from the match
-public class Match {
+public class Match implements Writable {
 
     private static int nextMatchId = 0;
 
@@ -114,5 +118,32 @@ public class Match {
             p.addWin(team);
         }
         p.addMatch(this, team);
+    }
+
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("win", this.win);
+        json.put("eloChange", this.eloChange);
+        json.put("myTeam", pokemonToJson(TeamSelector.USER));
+        json.put("enemyTeam", pokemonToJson(TeamSelector.OPPONENT));
+
+        return json;
+    }
+
+    // EFFECTS: returns pokemon on given team as a JSON array
+    private JSONArray pokemonToJson(TeamSelector team) {
+        List<Pokemon> selectedTeam;
+        JSONArray jsonArray = new JSONArray();
+        if (team == TeamSelector.USER) {
+            selectedTeam = this.myTeam;
+        } else {
+            selectedTeam = this.enemyTeam;
+        }
+
+        for (Pokemon p : selectedTeam) {
+            jsonArray.put(p.toJson());
+        }
+
+        return jsonArray;
     }
 }

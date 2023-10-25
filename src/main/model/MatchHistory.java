@@ -1,5 +1,8 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -184,5 +187,22 @@ public class MatchHistory {
             pokemonList.remove(lowestPokemon);
         }
         return getUsedOnTeam(resultList, team);
+    }
+
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("matches", matchesToJson());
+        return json;
+    }
+
+    // EFFECTS: returns matches in this match history as a JSON array
+    private JSONArray matchesToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (Match m : this.matches) {
+            jsonArray.put(m.toJson());
+        }
+
+        return jsonArray;
     }
 }

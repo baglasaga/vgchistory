@@ -1,16 +1,23 @@
 package ui;
 
 import model.*;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
 // Match History Viewer app
 public class MatchHistoryViewer {
+    private static final String JSON_LOCATION = "./data/matchhistory.json";
     private static final int MAX_POKEMON_PER_TEAM = 4;
     private MatchHistory mh;
     private PokemonFinder pf;
     private Scanner input;
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
 
     // EFFECTS: runs the app
     public MatchHistoryViewer() {
@@ -43,6 +50,8 @@ public class MatchHistoryViewer {
         mh = new MatchHistory();
         pf = new PokemonFinder();
         input = new Scanner(System.in);
+        jsonWriter = new JsonWriter(JSON_LOCATION);
+        jsonReader = new JsonReader(JSON_LOCATION);
     }
 
     // EFFECTS: displays menu of options to user
@@ -51,7 +60,9 @@ public class MatchHistoryViewer {
         System.out.println("\na -> add a match");
         System.out.println("\nv -> view match history");
         System.out.println("\np -> view Pokemon statistics");
-        System.out.println("\ns -> search Pokemon");
+        System.out.println("\nf -> find Pokemon");
+        System.out.println("\ns -> save match history to file");
+        System.out.println("\nl -> load match history from file");
         System.out.println("\nq -> quit");
     }
 
@@ -64,10 +75,37 @@ public class MatchHistoryViewer {
             displayMatches();
         } else if (command.equals("p")) {
             pokemonStatsOptions();
-        } else if (command.equals("s")) {
+        } else if (command.equals("f")) {
             searchPokemon();
+        } else if (command.equals("s")) {
+            saveMatchHistory();
+        } else if (command.equals("l")) {
+            loadMatchHistory();
         } else {
             System.out.println("Invalid input! Try again:");
+        }
+    }
+
+
+
+    // EFFECTS: saves match history to file
+    private void saveMatchHistory() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(mh);
+            jsonWriter.close();
+            System.out.println("Saved to " + JSON_LOCATION);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file " + JSON_LOCATION);
+        }
+    }
+
+    private void loadMatchHistory() {
+        try {
+            mh = jsonReader.read();
+            System.out.println("Successfully loaded " + JSON_LOCATION);
+        } catch (IOException e) {
+            System.out.println("Unable to load file " + JSON_LOCATION);
         }
     }
 

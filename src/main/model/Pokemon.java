@@ -1,11 +1,14 @@
 package model;
 
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.ArrayList;
 import java.util.List;
 
 // represents a Pokemon used in a Match, with a name, a list of Matches participated in on either the user's or
 // opponent's team, and a win rate for this Pokemon's usage on the user's team, and the opponent's team
-public class Pokemon {
+public class Pokemon implements Writable {
 
     private final String name;
     private final List<Match> alliedMatches;
@@ -110,4 +113,9 @@ public class Pokemon {
         }
     }
 
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", this.name);
+        return json;
+    }
 }
