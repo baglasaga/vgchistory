@@ -190,6 +190,7 @@ public class MatchHistory implements Writable {
         return getUsedOnTeam(resultList, team);
     }
 
+    // EFFECTS: returns this as JSON object
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("matches", matchesToJson());

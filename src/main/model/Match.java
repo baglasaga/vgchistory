@@ -120,6 +120,7 @@ public class Match implements Writable {
         p.addMatch(this, team);
     }
 
+    // EFFECTS: returns this as JSON object
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("win", this.win);

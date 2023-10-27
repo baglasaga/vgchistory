@@ -113,6 +113,7 @@ public class Pokemon implements Writable {
         }
     }
 
+    // EFFECTS: returns this as JSON object
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("name", this.name);
