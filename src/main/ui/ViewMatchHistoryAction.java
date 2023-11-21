@@ -24,10 +24,8 @@ public class ViewMatchHistoryAction extends AbstractAction {
         this.matchHistoryPanel.setLayout(new BoxLayout(matchHistoryPanel, BoxLayout.PAGE_AXIS));
         this.frame = frame;
         this.scrollPanel = new JPanel();
-//        this.scrollPanel.setLayout(new BoxLayout(scrollPanel, BoxLayout.PAGE_AXIS));
-//        this.scrollPanel.setLayout(new GridLayout(0, 3));
+        this.scrollPanel.setLayout(new BoxLayout(scrollPanel, BoxLayout.PAGE_AXIS));
         this.scrollPane = new JScrollPane(scrollPanel);
-//        this.scrollPane.setLayout(new BoxLayout(scrollPane, BoxLayout.PAGE_AXIS));
     }
 
     // TODO: make it so that it can store the match history that was previously called and then just build off of the
@@ -36,11 +34,13 @@ public class ViewMatchHistoryAction extends AbstractAction {
     // EFFECTS: empties out match history panel, and adds all match history information to match history panel
     @Override
     public void actionPerformed(ActionEvent e) {
+        ImageIcon img = new ImageIcon("data/incineroar.png", "Icon of Incineroar");
         matchHistoryPanel.removeAll();
         scrollPanel.removeAll();
         JLabel overallStats = new JLabel("<html>Elo: " + mh.getElo()
                                                + "<br> Win-rate: " + mh.getWinRate()
-                                               + "<br> Games played: " + mh.getMatches().size());
+                                               + "<br> Games played: " + mh.getMatches().size(), img,
+                                               JLabel.LEFT);
         overallStats.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         matchHistoryPanel.add(overallStats);
         matchHistoryPanel.add(new JButton(new ReturnToMenuAction(mainPanel, frame)));
@@ -53,6 +53,8 @@ public class ViewMatchHistoryAction extends AbstractAction {
         frame.revalidate();
     }
 
+    // MODIFIES: this
+    // EFFECTS: displays given match on scrollPanel as a panel
     private void displayMatch(Match m) {
         JPanel matchPanel = new JPanel(new BorderLayout());
         String winLoss;
@@ -75,12 +77,8 @@ public class ViewMatchHistoryAction extends AbstractAction {
         String myTeam = "<html>My team: <br>" + m.getTeamNames(TeamSelector.USER);
         String enemyTeam = "<html>My team: <br>" + m.getTeamNames(TeamSelector.OPPONENT);
         matchPanel.add(new JLabel("<html>" + matchStats + "<br>" + myTeam + "<br>" + enemyTeam));
-        matchPanel.setPreferredSize(new Dimension(200, 150));
-//        matchPanel.setVisible(true);
+        matchPanel.setPreferredSize(new Dimension(200, 250));
         scrollPanel.add(matchPanel);
-//        scrollPane.add(new JLabel("this works"));
-//        matches.addElement(matchPanel);
-//        matchHistoryPanel.add(matchPanel);
     }
 
 

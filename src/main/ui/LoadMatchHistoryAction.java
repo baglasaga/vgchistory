@@ -26,6 +26,8 @@ public class LoadMatchHistoryAction extends AbstractAction {
             // TODO: problem: this is only updating it within this class, but not within everything
             this.mh = jsonReader.read();
             JOptionPane.showMessageDialog(panel, "Successfully loaded " + JSON_LOCATION);
+            // TODO: return this value, then add a call to the main gui class that sets the new match history
+            // EZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(panel, "Unable to load file " + JSON_LOCATION);
         }
