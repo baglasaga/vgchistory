@@ -32,5 +32,7 @@ public class MatchHistoryViewerGUI extends JFrame {
     private void addButtons() {
         panel.add(new JButton(new AddMatchAction(mh, panel)));
         panel.add(new JButton(new ViewMatchHistoryAction(mh, panel, this)));
+        panel.add(new JButton(new SaveMatchHistoryAction(mh, panel)));
+        panel.add(new JButton(new LoadMatchHistoryAction(mh, panel)));
     }
 }

@@ -24,7 +24,10 @@ public class ViewMatchHistoryAction extends AbstractAction {
         this.matchHistoryPanel.setLayout(new BoxLayout(matchHistoryPanel, BoxLayout.PAGE_AXIS));
         this.frame = frame;
         this.scrollPanel = new JPanel();
+//        this.scrollPanel.setLayout(new BoxLayout(scrollPanel, BoxLayout.PAGE_AXIS));
+//        this.scrollPanel.setLayout(new GridLayout(0, 3));
         this.scrollPane = new JScrollPane(scrollPanel);
+//        this.scrollPane.setLayout(new BoxLayout(scrollPane, BoxLayout.PAGE_AXIS));
     }
 
     // TODO: make it so that it can store the match history that was previously called and then just build off of the
