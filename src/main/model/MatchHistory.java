@@ -175,7 +175,7 @@ public class MatchHistory implements Writable {
         return getUsedOnTeam(resultList, team);
     }
 
-    // REQUIRES: n <= this.pokemonList.size()
+    // REQUIRES: n <= this.pokemonList.size(), n > 0
     // EFFECTS: returns list of the n lowest win-rate Pokemon on given team that
     //          have usage on that team, picks the first win-rate to be the lowest in case of a tie
     public List<Pokemon> getLowestWinRates(int n, TeamSelector team) {
