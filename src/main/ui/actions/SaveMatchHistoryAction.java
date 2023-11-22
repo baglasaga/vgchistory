@@ -1,4 +1,4 @@
-package ui;
+package ui.actions;
 
 import model.MatchHistory;
 import persistence.JsonWriter;
@@ -20,6 +20,7 @@ public class SaveMatchHistoryAction extends AbstractAction {
         this.panel = panel;
     }
 
+    // EFFECTS: saves match history to file
     @Override
     public void actionPerformed(ActionEvent e) {
         try {

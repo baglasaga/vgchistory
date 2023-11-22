@@ -1,4 +1,4 @@
-package ui;
+package ui.actions;
 
 import model.Match;
 import model.MatchHistory;
@@ -12,6 +12,7 @@ public class ViewMatchHistoryAction extends AbstractAction {
     private MatchHistory mh;
     private JPanel mainPanel;
     private JPanel matchHistoryPanel;
+    private JPanel scrollContainerPanel;
     private JFrame frame;
     private JScrollPane scrollPane;
     private JPanel scrollPanel;
@@ -22,10 +23,13 @@ public class ViewMatchHistoryAction extends AbstractAction {
         this.mainPanel = panel;
         this.matchHistoryPanel = new JPanel();
         this.matchHistoryPanel.setLayout(new BoxLayout(matchHistoryPanel, BoxLayout.PAGE_AXIS));
+        this.scrollContainerPanel = new JPanel();
+        this.scrollContainerPanel.setLayout(new GridLayout(1, 0));
         this.frame = frame;
         this.scrollPanel = new JPanel();
         this.scrollPanel.setLayout(new BoxLayout(scrollPanel, BoxLayout.PAGE_AXIS));
         this.scrollPane = new JScrollPane(scrollPanel);
+        this.scrollPane.getVerticalScrollBar().setUnitIncrement(15);
     }
 
     // TODO: make it so that it can store the match history that was previously called and then just build off of the
@@ -43,14 +47,23 @@ public class ViewMatchHistoryAction extends AbstractAction {
                                                JLabel.LEFT);
         overallStats.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         matchHistoryPanel.add(overallStats);
-        matchHistoryPanel.add(new JButton(new ReturnToMenuAction(mainPanel, frame)));
+        addButtons();
         for (Match m : mh.getMatches()) {
             displayMatch(m);
         }
-        matchHistoryPanel.add(scrollPane);
+        scrollContainerPanel.add(scrollPane);
+        matchHistoryPanel.add(scrollContainerPanel);
         frame.setContentPane(matchHistoryPanel);
         frame.repaint();
         frame.revalidate();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: adds necessary buttons to match history panel
+    private void addButtons() {
+        matchHistoryPanel.add(new JButton(new ReturnToMenuAction(mainPanel, frame)));
+        matchHistoryPanel.add(new JButton(new FilterPokemonAction(mh, scrollContainerPanel)));
+        matchHistoryPanel.add(new JButton(new SearchPokemonAction(mh, scrollContainerPanel)));
     }
 
     // MODIFIES: this

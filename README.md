@@ -36,3 +36,20 @@ to find its statistics
 - As a user, I want to have the option to save my entire match history to file
 - As a user, I want to have the option to reload a pre-saved match history from file to resume 
 exactly where I left off
+
+## Instructions for Grader
+
+- You can generate the first required action related to the user story "adding multiple matches 
+to the match history" by: 
+  - Clicking "Add match" in the first menu upon opening the application
+  - Entering an integer to represent how much elo was gained/lost in the match
+  - Selecting whether the match was won or lost on the shown drop-down menu
+  - Entering eight names that represent names of Pokemon used in that match
+- You can generate the second required action related to the user story "viewing the match history" by:
+    - Clicking "View Match History" in the first menu
+    - If this is done after matches were added, they will be visible
+- You can locate my visual component at the top of the screen that appears after clicking "View Match History"
+- You can save the state of my application by clicking "Save match history" in the first menu
+  - If you were previously in the screen for viewing the match history, simply return to the first menu by clicking 
+"Return to Menu"
+- You can reload the state of my application by clicking "Load match history" in the first menu
