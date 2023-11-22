@@ -6,13 +6,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
+// class involved in displaying Pokemon in correct format
 public class PokemonDisplayer {
 
+    // EFFECTS: constructs a pokemon displayer
     public PokemonDisplayer() {
 
     }
 
-    // MODIFIES: this
+    // MODIFIES: panel
     // EFFECTS: displays list of Pokemon onto panel
     public void displayPokemonList(List<Pokemon> pokemonList, JPanel panel) {
 
@@ -21,7 +23,7 @@ public class PokemonDisplayer {
         }
     }
 
-    // MODIFIES: this
+    // MODIFIES: panel
     // EFFECTS: displays given Pokemon onto panel
     public void displayPokemon(Pokemon p, JPanel panel) {
         String pokemonInfo = "<html>[" + p.getName() + "]<br>"

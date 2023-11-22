@@ -7,6 +7,7 @@ import model.TeamSelector;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 
+// represents an action to add matches in the GUI
 public class AddMatchAction extends AbstractAction {
     private static final int MAX_POKEMON_PER_TEAM = 4;
     private MatchHistory mh;
@@ -85,7 +86,8 @@ public class AddMatchAction extends AbstractAction {
     }
 
     // MODIFIES: match
-    // EFFECTS: adds a team to processed match based on user input
+    // EFFECTS: adds a team to processed match based on user input, if window is closed or 'cancel' is clicked
+    //          then prompts user again
     private void addTeam(Match match, TeamSelector team) {
         String teamString;
         if (team == TeamSelector.USER) {
@@ -95,9 +97,19 @@ public class AddMatchAction extends AbstractAction {
         }
         String prompt = "Add a Pokemon on " + teamString + " team (case sensitive):";
         for (int i = 0; i < MAX_POKEMON_PER_TEAM; i++) {
-            String name = JOptionPane.showInputDialog(panel, prompt, "");
-            match.addPokemonByName(name, team, mh);
+            boolean choosing = true;
+            while (choosing) {
+
+                String name = JOptionPane.showInputDialog(panel, prompt, null);
+                if (name != null) {
+                    match.addPokemonByName(name, team, mh);
+                    choosing = false;
+                } else {
+                    JOptionPane.showMessageDialog(panel, "Please enter a name.");
+                }
+
+
+            }
         }
     }
-
 }

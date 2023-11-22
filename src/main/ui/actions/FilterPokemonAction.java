@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.util.List;
 
+// represents an action to filter and display Pokemon depending on user input in GUI
 public class FilterPokemonAction extends AbstractAction {
     private MatchHistory mh;
     private JPanel parentContainerPanel;
@@ -15,6 +16,8 @@ public class FilterPokemonAction extends AbstractAction {
     private JScrollPane scrollPane;
     private PokemonDisplayer pd;
 
+    // EFFECTS: constructs filter pokemon action with given match history and parent container panel
+    //          with necessary display panels and scroll pane
     public FilterPokemonAction(MatchHistory mh, JPanel panel) {
         super("Filter Pokemon");
         this.mh = mh;

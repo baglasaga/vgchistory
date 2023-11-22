@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
+// represents an action to display the match history in the GUI
 public class ViewMatchHistoryAction extends AbstractAction {
     private MatchHistory mh;
     private JPanel mainPanel;
@@ -91,7 +92,7 @@ public class ViewMatchHistoryAction extends AbstractAction {
         String enemyTeam = "<html>My team: <br>" + m.getTeamNames(TeamSelector.OPPONENT);
         matchPanel.add(new JLabel("<html>" + matchStats + "<br>" + myTeam + "<br>" + enemyTeam));
         matchPanel.setPreferredSize(new Dimension(200, 250));
-        scrollPanel.add(matchPanel);
+        scrollPanel.add(matchPanel, 0);
     }
 
 

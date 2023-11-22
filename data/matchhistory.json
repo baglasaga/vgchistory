@@ -1,1 +1,50 @@
-{"matches": []}
+{"matches": [
+    {
+        "enemyTeam": [
+            {"name": "Flutter Mane"},
+            {"name": "Miraidon"},
+            {"name": "Calyrex-Ice"},
+            {"name": "Cresselia"}
+        ],
+        "eloChange": 12,
+        "myTeam": [
+            {"name": "Incineroar"},
+            {"name": "Calyrex-Shadow"},
+            {"name": "Miraidon"},
+            {"name": "Sneasler"}
+        ],
+        "win": true
+    },
+    {
+        "enemyTeam": [
+            {"name": "Flutter Mane"},
+            {"name": "Tornadus"},
+            {"name": "Kingambit"},
+            {"name": "Incineroar"}
+        ],
+        "eloChange": -12,
+        "myTeam": [
+            {"name": "Incineroar"},
+            {"name": "Landorus-T"},
+            {"name": "Iron Hands"},
+            {"name": "Urshifu-Rapid"}
+        ],
+        "win": false
+    },
+    {
+        "enemyTeam": [
+            {"name": "Weezing"},
+            {"name": "Flutter Mane"},
+            {"name": "Roaring Moon"},
+            {"name": "Ogerpon-Wellspring"}
+        ],
+        "eloChange": 15,
+        "myTeam": [
+            {"name": "Dragapult"},
+            {"name": "Chien-Pao"},
+            {"name": "Rillaboom"},
+            {"name": "Dondozo"}
+        ],
+        "win": true
+    }
+]}

@@ -6,6 +6,7 @@ import model.PokemonFinder;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 
+// represents an action to search for and display a Pokemon in the GUI
 public class SearchPokemonAction extends AbstractAction {
     private MatchHistory mh;
     private JPanel parentContainerPanel;
@@ -13,6 +14,9 @@ public class SearchPokemonAction extends AbstractAction {
     private PokemonDisplayer pd;
     private PokemonFinder pf;
 
+    // EFFECTS: constructs a search pokemon action with given match history and panel,
+    //          and initializes a panel to display a pokemon in along with a Pokemon Finder and
+    //          PokemonDisplayer to do so
     public SearchPokemonAction(MatchHistory mh, JPanel panel) {
         super("Search Pokemon");
         this.mh = mh;

@@ -9,20 +9,18 @@ import ui.actions.ViewMatchHistoryAction;
 import javax.swing.*;
 import java.awt.*;
 
+// Match History Viewer app GUI
 public class MatchHistoryViewerGUI extends JFrame {
     public static final int WIDTH = 1000;
     public static final int HEIGHT = 700;
 
     private MatchHistory mh;
-    private JTabbedPane sidebar;
     private JPanel panel;
 
     public MatchHistoryViewerGUI() {
         super("VGC Match History Viewer");
         mh = new MatchHistory();
         panel = new JPanel();
-        // TODO: fix the sizing dont use this
-//        panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
         panel.setLayout(new GridLayout(0, 1));
         setMinimumSize(new Dimension(WIDTH, HEIGHT));
         addButtons();

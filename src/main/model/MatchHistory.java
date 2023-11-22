@@ -167,11 +167,12 @@ public class MatchHistory implements Writable {
         List<Pokemon> pokemonList = new ArrayList<>(this.pokemonList);
         List<Pokemon> resultList = new ArrayList<>();
 
-        for (int i = 0; i < n; i++) { 
+        for (int i = 0; i < n; i++) {
             Pokemon highestPokemon = returnHighestWinRate(pokemonList, team);
             resultList.add(highestPokemon);
             pokemonList.remove(highestPokemon);
         }
+
         return getUsedOnTeam(resultList, team);
     }
 
@@ -179,15 +180,18 @@ public class MatchHistory implements Writable {
     // EFFECTS: returns list of the n lowest win-rate Pokemon on given team that
     //          have usage on that team, picks the first win-rate to be the lowest in case of a tie
     public List<Pokemon> getLowestWinRates(int n, TeamSelector team) {
-        List<Pokemon> pokemonList = new ArrayList<>(this.pokemonList);
+        List<Pokemon> pokemonList = new ArrayList<>(getUsedOnTeam(this.pokemonList, team));
         List<Pokemon> resultList = new ArrayList<>();
 
         for (int i = 0; i < n; i++) {
+            if (pokemonList.isEmpty()) {
+                break;
+            }
             Pokemon lowestPokemon = returnLowestWinRate(pokemonList, team);
             resultList.add(lowestPokemon);
             pokemonList.remove(lowestPokemon);
         }
-        return getUsedOnTeam(resultList, team);
+        return resultList;
     }
 
     // EFFECTS: returns this as JSON object

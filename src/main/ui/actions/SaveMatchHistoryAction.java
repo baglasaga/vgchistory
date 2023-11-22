@@ -7,12 +7,14 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.io.FileNotFoundException;
 
+// represents an action to save a match history to file in the GUI
 public class SaveMatchHistoryAction extends AbstractAction {
     private static final String JSON_LOCATION = "./data/matchhistory.json";
     private JsonWriter jsonWriter;
     private MatchHistory mh;
     private JPanel panel;
 
+    // EFFECTS: constructs a save match history action with given match history and panel
     public SaveMatchHistoryAction(MatchHistory mh, JPanel panel) {
         super("Save match history");
         this.mh = mh;
