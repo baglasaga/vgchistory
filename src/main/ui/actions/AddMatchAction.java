@@ -102,7 +102,7 @@ public class AddMatchAction extends AbstractAction {
 
                 String name = JOptionPane.showInputDialog(panel, prompt, null);
                 if (name != null) {
-                    match.addPokemonByName(name, team, mh);
+                    match.addPokemonByName(name.trim(), team, mh);
                     choosing = false;
                 } else {
                     JOptionPane.showMessageDialog(panel, "Please enter a name.");

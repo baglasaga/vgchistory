@@ -92,13 +92,14 @@ public class Match implements Writable {
     //          adds that Pokemon to the given team in the match. otherwise, creates new Pokemon with given name
     //          and adds to the given team in the match
     public void addPokemonByName(String name, TeamSelector team, MatchHistory mh) {
+        String trimmedName = name.trim();
         PokemonFinder pf = new PokemonFinder();
-        if (pf.canFindName(name, mh.getPokemonList())) {
-            addPokemon(pf.findPokemon(name, mh.getPokemonList()), team);
-        } else if (findPokemonOnEitherTeam(name, pf) != null) {
-            addPokemon(findPokemonOnEitherTeam(name, pf), team);
+        if (pf.canFindName(trimmedName, mh.getPokemonList())) {
+            addPokemon(pf.findPokemon(trimmedName, mh.getPokemonList()), team);
+        } else if (findPokemonOnEitherTeam(trimmedName, pf) != null) {
+            addPokemon(findPokemonOnEitherTeam(trimmedName, pf), team);
         } else {
-            addPokemon(new Pokemon(name), team);
+            addPokemon(new Pokemon(trimmedName), team);
         }
     }
 

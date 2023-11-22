@@ -28,7 +28,7 @@ public class SearchPokemonAction extends AbstractAction {
 
     // MODIFIES: this
     // EFFECTS: displays Pokemon of user-inputted name, gives message if couldn't
-    //          find the name
+    //          find the name, does nothing if nothing input window was closed or 'cancel' was clicked
     @Override
     public void actionPerformed(ActionEvent e) {
         String name = (String) JOptionPane.showInputDialog(parentContainerPanel,
@@ -38,13 +38,16 @@ public class SearchPokemonAction extends AbstractAction {
                     null,
                     null,
                     "");
-        if (pf.canFindName(name, mh.getPokemonList())) {
-            pd.displayPokemon(pf.findPokemon(name, mh.getPokemonList()), pokemonPanel);
-        } else {
-            JOptionPane.showMessageDialog(parentContainerPanel, "Couldn't find " + name);
+        if (name != null) {
+            pokemonPanel.removeAll();
+            if (pf.canFindName(name, mh.getPokemonList())) {
+                pd.displayPokemon(pf.findPokemon(name, mh.getPokemonList()), pokemonPanel);
+            } else {
+                JOptionPane.showMessageDialog(parentContainerPanel, "Couldn't find " + name);
+            }
+            parentContainerPanel.add(pokemonPanel);
+            parentContainerPanel.revalidate();
+            parentContainerPanel.repaint();
         }
-        parentContainerPanel.add(pokemonPanel);
-        parentContainerPanel.revalidate();
-        parentContainerPanel.repaint();
     }
 }

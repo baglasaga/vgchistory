@@ -13,15 +13,20 @@ import java.awt.*;
 public class MatchHistoryViewerGUI extends JFrame {
     public static final int WIDTH = 1000;
     public static final int HEIGHT = 700;
-
     private MatchHistory mh;
-    private JPanel panel;
+    private JPanel buttonPanel;
+    private JPanel buttonContainer;
 
+    // EFFECTS: constructs match history viewer GUI and initializes match history, buttons, and necessary panels
+    //          and frame with correct layout
     public MatchHistoryViewerGUI() {
         super("VGC Match History Viewer");
         mh = new MatchHistory();
-        panel = new JPanel();
-        panel.setLayout(new GridLayout(0, 1));
+        buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(0, 1));
+        buttonContainer = new JPanel();
+        buttonContainer.setLayout(new GridLayout(0, 1));
+        add(buttonContainer);
         setMinimumSize(new Dimension(WIDTH, HEIGHT));
         addButtons();
 
@@ -32,19 +37,19 @@ public class MatchHistoryViewerGUI extends JFrame {
     // MODIFIES: this
     // EFFECTS: adds necessary buttons to panel and adds panel to this, resetting panel before doing so
     private void addButtons() {
-        panel.removeAll();
-        panel.add(new JButton(new AddMatchAction(mh, panel)));
-        panel.add(new JButton(new ViewMatchHistoryAction(mh, panel, this)));
-        panel.add(new JButton(new SaveMatchHistoryAction(mh, panel)));
-        panel.add(new JButton(new LoadMatchHistoryAction(mh, panel, this)));
-        add(panel, BorderLayout.CENTER);
+        buttonPanel.removeAll();
+        buttonPanel.add(new JButton(new AddMatchAction(mh, buttonContainer)));
+        buttonPanel.add(new JButton(new ViewMatchHistoryAction(mh, buttonContainer, this)));
+        buttonPanel.add(new JButton(new SaveMatchHistoryAction(mh, buttonContainer)));
+        buttonPanel.add(new JButton(new LoadMatchHistoryAction(mh, buttonContainer, this)));
+        buttonContainer.add(buttonPanel, BorderLayout.CENTER);
     }
 
     // MODIFIES: this
     // EFFECTS: sets match history to given match history and recreates buttons with updated match history
     public void setMatchHistory(MatchHistory mh) {
         this.mh = mh;
-        remove(panel);
+        buttonContainer.remove(buttonPanel);
         addButtons();
         revalidate();
         repaint();

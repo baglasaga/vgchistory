@@ -46,6 +46,22 @@ public class PokemonFinderTest {
     }
 
     @Test
+    public void testCanFindNameIgnoringCase() {
+        pokemonList.add(p1);
+        assertTrue(pf.canFindName("snorlax", pokemonList));
+        assertTrue(pf.canFindName("sNorLax", pokemonList));
+        assertTrue(pf.canFindName("SNORLAX", pokemonList));
+    }
+
+    @Test
+    public void testCanFindNameIgnoringSpaces() {
+        pokemonList.add(p1);
+        assertTrue(pf.canFindName(" snorlax", pokemonList));
+        assertTrue(pf.canFindName("sNorLax ", pokemonList));
+        assertTrue(pf.canFindName("      SNORLAX   ", pokemonList));
+    }
+
+    @Test
     public void testFindPokemonOneInList() {
         pokemonList.add(p1);
         assertEquals(p1, pf.findPokemon("Snorlax", pokemonList));
@@ -63,4 +79,15 @@ public class PokemonFinderTest {
     public void testCantFindPokemon() {
         assertNull(pf.findPokemon("Kommo-o", pokemonList));
     }
+
+    @Test
+    public void testFindPokemonIgnoringCase() {
+        pokemonList.add(p1);
+
+        assertEquals(p1, pf.findPokemon("snorlax", pokemonList));
+        assertEquals(p1, pf.findPokemon("sNorLax", pokemonList));
+        assertEquals(p1, pf.findPokemon("SNORLAX", pokemonList));
+    }
+
+
 }
