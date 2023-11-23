@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.util.List;
 
+// represents an action to filter and display Pokemon depending on user input in GUI
 public class FilterPokemonAction extends AbstractAction {
     private MatchHistory mh;
     private JPanel parentContainerPanel;
@@ -15,6 +16,8 @@ public class FilterPokemonAction extends AbstractAction {
     private JScrollPane scrollPane;
     private PokemonDisplayer pd;
 
+    // EFFECTS: constructs filter pokemon action with given match history and parent container panel
+    //          with necessary display panels and scroll pane
     public FilterPokemonAction(MatchHistory mh, JPanel panel) {
         super("Filter Pokemon");
         this.mh = mh;
@@ -31,19 +34,23 @@ public class FilterPokemonAction extends AbstractAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         scrollPanel.removeAll();
-        Object[] sortOptions = {"Sort by win-rates of Pokemon used on my team",
-                                "Sort by win-rates of Pokemon used on the enemy team"};
-        String sortChoice = (String)JOptionPane.showInputDialog(parentContainerPanel,
-                                                                "What would you like to filter by?",
-                                                                "Filter Options",
-                                                                JOptionPane.PLAIN_MESSAGE,
-                                                                null,
-                                                                sortOptions,
-                                                                "");
-        if (sortChoice.equals(sortOptions[0])) {
-            numSelector(TeamSelector.USER);
-        } else {
-            numSelector(TeamSelector.OPPONENT);
+        try {
+            Object[] sortOptions = {"Sort by win-rates of Pokemon used on my team",
+                    "Sort by win-rates of Pokemon used on the enemy team"};
+            String sortChoice = (String) JOptionPane.showInputDialog(parentContainerPanel,
+                    "What would you like to filter by?",
+                    "Filter Options",
+                    JOptionPane.PLAIN_MESSAGE,
+                    null,
+                    sortOptions,
+                    "");
+            if (sortChoice.equals(sortOptions[0])) {
+                numSelector(TeamSelector.USER);
+            } else {
+                numSelector(TeamSelector.OPPONENT);
+            }
+        } catch (NullPointerException error) {
+            // nothing; filter was cancelled;
         }
     }
 
@@ -51,51 +58,74 @@ public class FilterPokemonAction extends AbstractAction {
     //          to enter a custom number amount
     private void numSelector(TeamSelector team) {
         Object[] numberOptions = {"All", "Custom amount"};
-        String numberChoice = (String)JOptionPane.showInputDialog(parentContainerPanel,
-                "What would you like to filter by?",
-                "Filter Options",
-                JOptionPane.PLAIN_MESSAGE,
-                null,
-                numberOptions, "");
-        int num;
-        if (numberChoice.equals(numberOptions[0])) {
-            num = mh.getPokemonList().size();
-        } else {
-            num = Integer.parseInt((String) JOptionPane.showInputDialog(parentContainerPanel,
-                    "Enter number of Pokemon to filter",
-                    "Number of Pokemon to Filter",
+        try {
+            String numberChoice = (String) JOptionPane.showInputDialog(parentContainerPanel,
+                    "How many Pokemon would you like to be displayed?",
+                    "Filter Options",
                     JOptionPane.PLAIN_MESSAGE,
                     null,
-                    null,
-                    ""));
-            if (num > mh.getPokemonList().size()) {
+                    numberOptions, "");
+            int num;
+            if (numberChoice.equals(numberOptions[0])) {
                 num = mh.getPokemonList().size();
+            } else {
+                num = enterCustomNumber();
+            }
+            filterHighestOrLowest(team, num);
+        } catch (NullPointerException e) {
+            // nothing; filter was cancelled
+        }
+    }
+
+    // EFFECTS: returns int inputted by user, if an invalid input is received, prompts again
+    private int enterCustomNumber() {
+        int num = 0;
+        boolean choosing = true;
+        while (choosing) {
+            try {
+                num = Integer.parseInt((String) JOptionPane.showInputDialog(parentContainerPanel,
+                        "Enter number of Pokemon to filter",
+                        "Number of Pokemon to Filter",
+                        JOptionPane.PLAIN_MESSAGE,
+                        null,
+                        null,
+                        ""));
+                choosing = false;
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(parentContainerPanel, "Please input a number");
             }
         }
-        filterHighestOrLowest(team, num);
+        if (num > mh.getPokemonList().size()) {
+            num = mh.getPokemonList().size();
+        }
+        return num;
     }
 
     // MODIFIES: this
     // EFFECTS: displays the filtered list of Pokemon based on the user's inputs
     private void filterHighestOrLowest(TeamSelector team, int num) {
         Object[] filterOptions = {"Highest", "Lowest"};
-        String filterChoice = (String)JOptionPane.showInputDialog(parentContainerPanel,
-                "Sort by highest or lowest win-rates?",
-                "Filter Options",
-                JOptionPane.PLAIN_MESSAGE,
-                null,
-                filterOptions,
-                "");
-        List<Pokemon> pokemonList;
-        if (filterChoice.equals(filterOptions[0])) {
-            pokemonList = mh.getHighestWinRates(num, team);
-        } else {
-            pokemonList = mh.getLowestWinRates(num, team);
+        try {
+            String filterChoice = (String) JOptionPane.showInputDialog(parentContainerPanel,
+                    "Sort by highest or lowest win-rates?",
+                    "Filter Options",
+                    JOptionPane.PLAIN_MESSAGE,
+                    null,
+                    filterOptions,
+                    "");
+            List<Pokemon> pokemonList;
+            if (filterChoice.equals(filterOptions[0])) {
+                pokemonList = mh.getHighestWinRates(num, team);
+            } else {
+                pokemonList = mh.getLowestWinRates(num, team);
+            }
+            pd.displayPokemonList(pokemonList, scrollPanel);
+            parentContainerPanel.add(scrollPane);
+            parentContainerPanel.repaint();
+            parentContainerPanel.revalidate();
+        } catch (NullPointerException e) {
+            // nothing; filter was cancelled
         }
-        pd.displayPokemonList(pokemonList, scrollPanel);
-        parentContainerPanel.add(scrollPane);
-        parentContainerPanel.repaint();
-        parentContainerPanel.revalidate();
     }
 
 

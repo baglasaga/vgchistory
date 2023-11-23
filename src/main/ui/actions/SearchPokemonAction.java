@@ -6,6 +6,7 @@ import model.PokemonFinder;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 
+// represents an action to search for and display a Pokemon in the GUI
 public class SearchPokemonAction extends AbstractAction {
     private MatchHistory mh;
     private JPanel parentContainerPanel;
@@ -13,6 +14,9 @@ public class SearchPokemonAction extends AbstractAction {
     private PokemonDisplayer pd;
     private PokemonFinder pf;
 
+    // EFFECTS: constructs a search pokemon action with given match history and panel,
+    //          and initializes a panel to display a pokemon in along with a Pokemon Finder and
+    //          PokemonDisplayer to do so
     public SearchPokemonAction(MatchHistory mh, JPanel panel) {
         super("Search Pokemon");
         this.mh = mh;
@@ -24,7 +28,7 @@ public class SearchPokemonAction extends AbstractAction {
 
     // MODIFIES: this
     // EFFECTS: displays Pokemon of user-inputted name, gives message if couldn't
-    //          find the name
+    //          find the name, does nothing if nothing input window was closed or 'cancel' was clicked
     @Override
     public void actionPerformed(ActionEvent e) {
         String name = (String) JOptionPane.showInputDialog(parentContainerPanel,
@@ -34,13 +38,16 @@ public class SearchPokemonAction extends AbstractAction {
                     null,
                     null,
                     "");
-        if (pf.canFindName(name, mh.getPokemonList())) {
-            pd.displayPokemon(pf.findPokemon(name, mh.getPokemonList()), pokemonPanel);
-        } else {
-            JOptionPane.showMessageDialog(parentContainerPanel, "Couldn't find " + name);
+        if (name != null) {
+            pokemonPanel.removeAll();
+            if (pf.canFindName(name, mh.getPokemonList())) {
+                pd.displayPokemon(pf.findPokemon(name, mh.getPokemonList()), pokemonPanel);
+            } else {
+                JOptionPane.showMessageDialog(parentContainerPanel, "Couldn't find " + name);
+            }
+            parentContainerPanel.add(pokemonPanel);
+            parentContainerPanel.revalidate();
+            parentContainerPanel.repaint();
         }
-        parentContainerPanel.add(pokemonPanel);
-        parentContainerPanel.revalidate();
-        parentContainerPanel.repaint();
     }
 }

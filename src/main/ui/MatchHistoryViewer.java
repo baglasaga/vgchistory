@@ -100,6 +100,7 @@ public class MatchHistoryViewer {
         }
     }
 
+    // EFFECTS: loads match history from file
     private void loadMatchHistory() {
         try {
             mh = jsonReader.read();
@@ -154,9 +155,9 @@ public class MatchHistoryViewer {
     private void addTeam(Match match, TeamSelector team) {
         String prompt;
         if (team == TeamSelector.USER) {
-            prompt = "Add a Pokemon on your team (case sensitive):\n";
+            prompt = "Add a Pokemon on your team:\n";
         } else {
-            prompt = "Add a Pokemon on the enemy's team (case sensitive):\n";
+            prompt = "Add a Pokemon on the enemy's team:\n";
         }
         for (int i = 0; i < MAX_POKEMON_PER_TEAM; i++) {
             System.out.println(prompt);
