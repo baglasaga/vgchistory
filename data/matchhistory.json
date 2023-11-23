@@ -1,0 +1,50 @@
+{"matches": [
+    {
+        "enemyTeam": [
+            {"name": "Flutter Mane"},
+            {"name": "Tornadus"},
+            {"name": "Chi-Yu"},
+            {"name": "Iron Hands"}
+        ],
+        "eloChange": 3,
+        "myTeam": [
+            {"name": "Rillaboom"},
+            {"name": "Chien-Pao"},
+            {"name": "Dragapult"},
+            {"name": "Ting-Lu"}
+        ],
+        "win": true
+    },
+    {
+        "enemyTeam": [
+            {"name": "Tornadus"},
+            {"name": "Urshifu-Rapid"},
+            {"name": "Weezing"},
+            {"name": "Roaring Moon"}
+        ],
+        "eloChange": -2,
+        "myTeam": [
+            {"name": "Dondozo"},
+            {"name": "Ting-Lu"},
+            {"name": "Amoongus"},
+            {"name": "Chien-Pao"}
+        ],
+        "win": false
+    },
+    {
+        "enemyTeam": [
+            {"name": "Urshifu-Rapid"},
+            {"name": "Rillaboom"},
+            {"name": "Chi-Yu"},
+            {"name": "Flutter Mane"}
+        ],
+        "eloChange": 2,
+        "myTeam": [
+            {"name": "Dragapult"},
+            {"name": "Chien-Pao"},
+            {"name": "Rillaboom"},
+            {"name": "Tornadus"}
+        ],
+        "win": true
+    }
+]}
