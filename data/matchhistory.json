@@ -2,48 +2,48 @@
     {
         "enemyTeam": [
             {"name": "Flutter Mane"},
-            {"name": "Miraidon"},
-            {"name": "Calyrex-Ice"},
-            {"name": "Cresselia"}
+            {"name": "Tornadus"},
+            {"name": "Chi-Yu"},
+            {"name": "Iron Hands"}
         ],
-        "eloChange": 12,
+        "eloChange": 3,
         "myTeam": [
-            {"name": "Incineroar"},
-            {"name": "Calyrex-Shadow"},
-            {"name": "Miraidon"},
-            {"name": "Sneasler"}
+            {"name": "Rillaboom"},
+            {"name": "Chien-Pao"},
+            {"name": "Dragapult"},
+            {"name": "Ting-Lu"}
         ],
         "win": true
     },
     {
         "enemyTeam": [
-            {"name": "Flutter Mane"},
             {"name": "Tornadus"},
-            {"name": "Kingambit"},
-            {"name": "Incineroar"}
+            {"name": "Urshifu-Rapid"},
+            {"name": "Weezing"},
+            {"name": "Roaring Moon"}
         ],
-        "eloChange": -12,
+        "eloChange": -2,
         "myTeam": [
-            {"name": "Incineroar"},
-            {"name": "Landorus-T"},
-            {"name": "Iron Hands"},
-            {"name": "Urshifu-Rapid"}
+            {"name": "Dondozo"},
+            {"name": "Ting-Lu"},
+            {"name": "Amoongus"},
+            {"name": "Chien-Pao"}
         ],
         "win": false
     },
     {
         "enemyTeam": [
-            {"name": "Weezing"},
-            {"name": "Flutter Mane"},
-            {"name": "Roaring Moon"},
-            {"name": "Ogerpon-Wellspring"}
+            {"name": "Urshifu-Rapid"},
+            {"name": "Rillaboom"},
+            {"name": "Chi-Yu"},
+            {"name": "Flutter Mane"}
         ],
-        "eloChange": 15,
+        "eloChange": 2,
         "myTeam": [
             {"name": "Dragapult"},
             {"name": "Chien-Pao"},
             {"name": "Rillaboom"},
-            {"name": "Dondozo"}
+            {"name": "Tornadus"}
         ],
         "win": true
     }
