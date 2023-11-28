@@ -53,6 +53,8 @@ public class MatchHistory implements Writable {
     private void addUniquePokemon(Pokemon p) {
         if (!this.pokemonList.contains(p)) {
             this.pokemonList.add(p);
+            EventLog.getInstance().logEvent(new Event("Added unique Pokemon "
+                                            + p.getName() + " to unique Pokemon list"));
         }
     }
 
@@ -84,6 +86,7 @@ public class MatchHistory implements Writable {
         updatePokemonList(match, TeamSelector.USER);
         updatePokemonList(match, TeamSelector.OPPONENT);
         updateWinRate();
+        EventLog.getInstance().logEvent(new Event("Added a Match with id " + match.getId()));
     }
 
     // REQUIRES: matches must not be empty
@@ -157,6 +160,7 @@ public class MatchHistory implements Writable {
                 highestPokemon = p;
             }
         }
+
         return highestPokemon;
     }
 
@@ -172,7 +176,14 @@ public class MatchHistory implements Writable {
             resultList.add(highestPokemon);
             pokemonList.remove(highestPokemon);
         }
-
+        String teamString;
+        if (team == TeamSelector.USER) {
+            teamString = "my team";
+        } else {
+            teamString = "the enemy's team";
+        }
+        EventLog.getInstance().logEvent(new Event("filtered " + n + " highest win-rate Pokemon found on "
+                                                  + teamString));
         return getUsedOnTeam(resultList, team);
     }
 
@@ -191,6 +202,14 @@ public class MatchHistory implements Writable {
             resultList.add(lowestPokemon);
             pokemonList.remove(lowestPokemon);
         }
+        String teamString;
+        if (team == TeamSelector.USER) {
+            teamString = "my team";
+        } else {
+            teamString = "the enemy's team";
+        }
+        EventLog.getInstance().logEvent(new Event("filtered " + n + "lowest win-rate Pokemon found on "
+                                                  + teamString));
         return resultList;
     }
 

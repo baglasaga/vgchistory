@@ -1,5 +1,7 @@
 package ui;
 
+import model.Event;
+import model.EventLog;
 import model.MatchHistory;
 import ui.actions.AddMatchAction;
 import ui.actions.LoadMatchHistoryAction;
@@ -8,6 +10,10 @@ import ui.actions.ViewMatchHistoryAction;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.util.Iterator;
 
 // Match History Viewer app GUI
 public class MatchHistoryViewerGUI extends JFrame {
@@ -29,7 +35,17 @@ public class MatchHistoryViewerGUI extends JFrame {
         add(buttonContainer);
         setMinimumSize(new Dimension(WIDTH, HEIGHT));
         addButtons();
-
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+//                super.windowClosing(e);
+                Iterator<model.Event> iterator = EventLog.getInstance().iterator();
+                while (iterator.hasNext()) {
+                    Event event = iterator.next();
+                    System.out.println(event.toString());
+                }
+            }
+        });
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
     }

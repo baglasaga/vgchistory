@@ -25,6 +25,7 @@ public class Match implements Writable {
         this.eloChange = 0;
         this.myTeam = new ArrayList<>();
         this.enemyTeam = new ArrayList<>();
+        EventLog.getInstance().logEvent(new Event("Created a match with id " + getId()));
     }
 
     // getters and setters
@@ -51,14 +52,17 @@ public class Match implements Writable {
 
     public void setWin() {
         this.win = true;
+        EventLog.getInstance().logEvent(new Event("Match with id " + getId() + " set to won"));
     }
 
     public void setLoss() {
         this.win = false;
+        EventLog.getInstance().logEvent(new Event("Match with id " + getId() + " set to loss"));
     }
 
     public void setEloChange(int elo) {
         this.eloChange = elo;
+        EventLog.getInstance().logEvent(new Event("Match with id " + getId() + " changed elo by " + getEloChange()));
     }
 
     // EFFECTS: returns list of the names of every Pokemon on given team
@@ -108,17 +112,20 @@ public class Match implements Writable {
     // EFFECTS: adds p to given team, and adds this to p's matches on that team, adding a win for p on that team if the
     // match is won
     private void addPokemon(Pokemon p, TeamSelector team) {
-
+        String teamString;
         if (team == TeamSelector.USER) {
             this.myTeam.add(p);
+            teamString = "my team";
         } else {
             this.enemyTeam.add(p);
+            teamString = "the enemy's team";
         }
 
         if (this.win) {
             p.addWin(team);
         }
         p.addMatch(this, team);
+        EventLog.getInstance().logEvent(new Event("Added " + p.getName() + " to " + teamString));
     }
 
     // EFFECTS: returns this as JSON object

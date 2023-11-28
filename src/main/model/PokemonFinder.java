@@ -22,6 +22,7 @@ public class PokemonFinder {
         String nameIgnoreCase = name.toLowerCase().trim();
         for (Pokemon p : list) {
             if (p.getName().toLowerCase().trim().equals(nameIgnoreCase)) {
+                EventLog.getInstance().logEvent(new Event("Found Pokemon named " + p.getName()));
                 return p;
             }
         }

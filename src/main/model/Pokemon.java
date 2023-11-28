@@ -79,6 +79,7 @@ public class Pokemon implements Writable {
         } else {
             this.enemyWins++;
         }
+        EventLog.getInstance().logEvent(new Event("Win added to " + getName()));
     }
 
     // MODIFIES: this
@@ -90,6 +91,8 @@ public class Pokemon implements Writable {
             this.enemyMatches.add(match);
         }
         updateWinRate(team);
+        EventLog.getInstance().logEvent(new Event("Match with id " + match.getId()
+                                                  + " added to matches of " + getName()));
     }
 
     // REQUIRES: list of matches for given team must not be empty
@@ -111,6 +114,7 @@ public class Pokemon implements Writable {
         } else {
             this.enemyWinRate = rawWinRate * 100;
         }
+        EventLog.getInstance().logEvent(new Event("Win-rate of " + getName() + " updated"));
     }
 
     // EFFECTS: returns this as JSON object
