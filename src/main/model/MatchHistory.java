@@ -29,6 +29,7 @@ public class MatchHistory implements Writable {
 
     // getters
     public List<Match> getMatches() {
+        EventLog.getInstance().logEvent(new Event("Match History displayed"));
         return this.matches;
     }
 
