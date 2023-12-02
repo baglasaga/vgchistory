@@ -18,6 +18,7 @@ public class ViewMatchHistoryAction extends AbstractAction {
     private JScrollPane scrollPane;
     private JPanel scrollPanel;
 
+    // EFFECTS: constructs a View Match History Action with the necessary panels and main frame
     public ViewMatchHistoryAction(MatchHistory mh, JPanel panel, JFrame frame) {
         super("View Match History");
         this.mh = mh;
