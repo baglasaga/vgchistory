@@ -98,7 +98,7 @@ public class ViewMatchHistoryAction extends AbstractAction {
         String matchStats = "[ID: " + m.getId() + "]   "
                                            + winLoss + " (" + eloPrefix + m.getEloChange() + ")";
         String myTeam = "<html>My team: <br>" + m.getTeamNames(TeamSelector.USER);
-        String enemyTeam = "<html>My team: <br>" + m.getTeamNames(TeamSelector.OPPONENT);
+        String enemyTeam = "<html>Opponent's team: <br>" + m.getTeamNames(TeamSelector.OPPONENT);
         matchPanel.add(new JLabel("<html>" + matchStats + "<br>" + myTeam + "<br>" + enemyTeam));
         matchPanel.setPreferredSize(new Dimension(200, 250));
         scrollPanel.add(matchPanel, 0);
